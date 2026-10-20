@@ -1,39 +1,37 @@
-# Architecture: Royal Fiesta asset pipeline (raa-assets-tools + sdfm raa.prims export)
+# Architecture: raa-assets-tools
 
 ## Purpose
 
-Two repositories share one asset contract:
+`raa-assets-tools` is a standalone TypeScript package with four parts:
 
-- **raa-assets-tools** is a standalone brick. It works without RAA, Royal Fiesta or sdfm. It owns:
-  - the `raa.prims` v0 primitive-asset format, with its validator, canonical writer and conformance fixtures;
-  - the content-addressed asset manifest;
-  - the local asset store and the `raa-assets` CLI;
-  - the git guard that keeps binaries and assets out of repositories;
-  - the vendor packer;
-  - the Royal Fiesta asset authoring run `obstacles-v0`.
-- **sdfm** (SDF Modeler) consumes a vendored build of raa-assets-tools. It exports its documents to `raa.prims` through a pure core mapping, an MCP/CLI tool `export_raa_prims` and the app control "Export as raa.prims…".
+- the `raa.prims` v0 primitive-asset format: its validator, its canonical writer and conformance fixtures;
+- the content-addressed asset manifest;
+- the local asset store and the `raa-assets` command-line tool;
+- a git guard that keeps binaries and assets out of repositories, and an optional vendor packer.
 
-RAA and Royal Fiesta later write their own parsers against the shared sections below and reuse `fixtures/` and `fixtures/expected.json`.
+The package depends on no game, engine or editor. Other tools read and write the format through `schema/` and `fixtures/`, and they never need this package at runtime except through its exports or its CLI.
+
+`runs/obstacles-v0/` is an example authoring run. It is example data, described in `runs/README.md`, and is not part of the library.
 
 ## Conventions
 
-### raa-assets-tools
+### Package
 
-- Node >= 22.18, ESM (`"type": "module"`), TypeScript run directly from sources (`node file.ts`) and built with `tsc -p tsconfig.json` into `dist/`. Zero runtime dependencies; devDependencies are `typescript` and `@types/node` only.
+- Node >= 22.18, ESM (`"type": "module"`). The sources are TypeScript that Node runs directly (`node file.ts`). `npm run build` compiles them with `tsc -p tsconfig.json` into `dist/` (JavaScript and `.d.ts`), which is what the published package contains. Zero runtime dependencies; devDependencies are `typescript` and `@types/node` only.
 - `tsconfig.json`:
   - `rootDir` is `src` and `outDir` is `dist`;
-  - `skipLibCheck: true`, so builds don't depend on how complete the installed `@types/node` tree is. Project sources are still fully type-checked.
+  - `skipLibCheck: true`, so builds do not depend on how complete the installed `@types/node` tree is. Project sources are still fully type-checked.
 - `tsconfig.check.json`:
   - `noEmit: true` and `rootDir: "."`;
-  - it includes `src/**`, `test/**`, `proof/**` and `scripts/**`.
-- `npm run build` and `npm run typecheck` both exit 0.
-- Package exports, all declared from milestone 1:
+  - it includes `src/**`, `test/**`, `proof/**`, `runs/**` and `scripts/**`.
+- `npm run build`, `npm run typecheck` and `npm test` each exit 0.
+- Package exports, all declared in `package.json`:
 
   | subpath | content |
   |---|---|
   | `.` | format, validator, writer |
   | `./manifest` | manifest format |
-  | `./node` | hash, store, gc, redaction |
+  | `./node` | hash, store, gc, redaction (Node only) |
   | `./schema` | `schema/raa.prims.v0.schema.json` |
   | `./package.json` | the package file |
 
@@ -50,38 +48,24 @@ RAA and Royal Fiesta later write their own parsers against the shared sections b
   | 3 | any other store, filesystem or internal error |
 
 - Every CLI message goes through `redactSecrets`.
-- Tests use `node --test`. Proofs use `proof/lib.ts`. Process-spawning cases run through `parallelMap` and are bounded by `NMC_CPUS`.
-- **Local-only store.** The asset store is a local directory. It is chosen by `--store <dir>`, then `RAA_ASSETS_STORE_DIR`, then the default `STORE_DIR_DEFAULT` = `/root/nmc/asset-store/royal-fiesta` when that directory exists.
+- Tests use `node --test "test/**/*.test.ts"`. Proofs use `proof/lib.ts`. Cases that spawn processes run through `parallelMap`, bounded by the `PROOF_CPUS` environment variable (a positive integer, default 1).
+
+### Store
+
+- **Local-only store.** The asset store is a local directory. It is chosen by `--store <dir>`, then `RAA_ASSETS_STORE_DIR`, then the default `~/.raa-assets/store` when that directory exists.
   - There is no ssh store, no public-URL client and no store credential.
   - Outputs and evidence record relative object keys `objects/<2hex>/<sha256>`, never URLs.
   - Committed files, logs and evidence never contain absolute store paths, hosts, users or keys.
-- Worktree runs use `out/asset-store/royal-fiesta` (git-ignored). Once a run's store is complete, it is copied into the default directory with `cp -a out/asset-store/royal-fiesta/. /root/nmc/asset-store/royal-fiesta/`. The owner then copies that directory unchanged to the VM store root, which nginx serves at `https://assets.etcito.com/<key>` with a long immutable cache and CORS. Public reachability is an owner step: `curl -sI https://assets.etcito.com/<key>`.
-- Asset binaries (PNG, GLB, …) never go to git. Evidence files are committed JSON and record only hashes, sizes and keys.
+- Publishing is outside this package. A store directory can be copied unchanged to the web root of a static file server (see `docs/store.md`, "Publishing a store").
+- Asset binaries (PNG, GLB, ...) never go to git. Evidence files are committed JSON and record only hashes, sizes and keys.
 
-### sdfm
+### Optional consumers
 
-- sdfm consumes `@etcito/raa-assets-tools` through `"dependencies": {"@etcito/raa-assets-tools": "file:vendor/raa-assets-tools"}`. The vendor directory is produced only by `node $RAA_ASSETS_TOOLS_DIR/scripts/pack-vendor.ts vendor/raa-assets-tools`. That checkout path is never written into sdfm. `VENDOR.json` records the tools commit.
-- sdfm code imports only the browser-safe `'@etcito/raa-assets-tools'` entry, never `./node`, in `src/core` or in the browser.
-- `src/core/raa-export/` is pure and browser-safe. It is used by the MCP tool (`src/node/ops/`) and by the UI (`src/app/`, `src/components/`, `src/plugins/ui/`).
-- UI work follows sdfm's own rules:
-  - section 31: app scenarios use the real App.vue, one `setDocument`, then the ui-driver only;
-  - section 33: plain words in visible text, checked by `uiWordHits`.
-- Captures go to the git-ignored `out/`. Only their sha256 and size are committed.
-- Proofs run as `node scripts/proof/<name>.mjs [--only <regex>]` over `src/node/proofs/<name>.ts`. GPU evidence is regenerated with `node scripts/gpu-evidence.mjs <topic>`.
-
-### Royal Fiesta run (obstacles-v0)
-
-- The agent authors each asset with sdfm MCP tool calls recorded under `runs/obstacles-v0/recipes/`:
-  1. `doc_new`;
-  2. one `node_add_batch`;
-  3. `doc_save`;
-  4. `export_raa_prims`.
-- It uploads the raa.prims files, the sdfm source documents, the manifest and the contact sheet to the local default store directory, selected through `RAA_ASSETS_STORE_DIR`.
-- `report.md` documents the owner's public-fetch check (`curl -sI https://assets.etcito.com/<key>`: status 200, immutable caching, CORS). `dogfood.md` lists that check as a friction item.
+Applications that build on the format (for example an editor that exports `raa.prims` files) depend on this package from npm, or copy a built vendor tree made by `scripts/pack-vendor.ts`. The package itself has no knowledge of them. Their own source code is not part of this repository.
 
 ## Shared contracts
 
-The format, manifest, store, CLI and guard rules below are owned by raa-assets-tools. sdfm keeps no copy of them; it consumes the vendored package.
+The format, manifest, store, CLI and guard rules below are owned by this package. Consumers use the published package or its vendored build; they keep no copy of the rules.
 
 ## S1. raa.prims v0 file
 
@@ -140,7 +124,7 @@ Transform rules:
 - Root nodes and `union` children are separate closed meshes generated in place. Nothing is cut.
 - A `subtract` child removes its volume from its PARENT primitive's mesh only.
 - An `intersect` child keeps parent ∩ child.
-- RAA implements both by cutting the faces of the parent's mesh exactly with the convex child.
+- A conforming mesher implements both by cutting the faces of the parent's mesh exactly with the convex child.
 
 A cut is accepted only when all of these hold:
 
@@ -164,7 +148,7 @@ A cut is accepted only when all of these hold:
 
 ## S2. Triangle rule
 
-S2 sets what RAA generates at LOD0 and the validator's budget arithmetic. S = budget.segments and k = S/4.
+S2 sets the triangle count that a conforming mesher generates at LOD0 and the validator's budget arithmetic. S = budget.segments and k = S/4.
 
 | kind | triangles |
 |---|---|
@@ -178,7 +162,7 @@ S2 sets what RAA generates at LOD0 and the validator's budget arithmetic. S = bu
 
 At S = 16 this gives: box 12, roundBox 332, sphere 224, capsule 256, cylinder 60, cone 60 or 30, torus 256.
 
-The asset total is the sum of primitiveTriangles over ALL nodes, plus primitiveTriangles once more for every subtract or intersect node (the cut allowance). The asset is refused with BUDGET_EXCEEDED when total > budget.triangles. RAA must never generate more than this count.
+The asset total is the sum of primitiveTriangles over ALL nodes, plus primitiveTriangles once more for every subtract or intersect node (the cut allowance). The asset is refused with BUDGET_EXCEEDED when total > budget.triangles. A conforming mesher must never generate more than this count.
 
 ## S3. Collision
 
@@ -267,7 +251,7 @@ Validation order. All issues are collected, never only the first.
   - `.png` -> `image/png`; `.jpg` and `.jpeg` -> `image/jpeg`
   - `.glb` -> `model/gltf-binary`
   - anything else -> `application/octet-stream`
-- The game fetches a manifest by its sha256, then each entry by its sha256.
+- A consumer fetches a manifest by its sha256, then each entry by its sha256.
 
 ## S7. Asset store (local directory)
 
@@ -276,7 +260,7 @@ Validation order. All issues are collected, never only the first.
 - Store selection (`storeFromEnv`), in order:
   1. `--store <dir>`;
   2. env `RAA_ASSETS_STORE_DIR`;
-  3. `STORE_DIR_DEFAULT` = `/root/nmc/asset-store/royal-fiesta`, only if it is an existing directory.
+  3. `STORE_DIR_DEFAULT` = `~/.raa-assets/store`, only if it is an existing directory.
 
   Otherwise it throws `NO_STORE` ('no asset store is configured and the default store directory does not exist'; fix 'pass --store <dir> or set RAA_ASSETS_STORE_DIR').
 - Put:
@@ -285,7 +269,7 @@ Validation order. All issues are collected, never only the first.
   - Temp names start with '.', are never listed, and none is left behind after a successful put.
   - An existing object is never rewritten: put reports created=false.
 - Get re-hashes the bytes. It fails with OBJECT_HASH_MISMATCH on a mismatch and OBJECT_NOT_FOUND when the object is absent.
-- Publication is an owner step. The owner copies the store directory unchanged to the VM store root, which nginx serves at `https://assets.etcito.com/objects/<2hex>/<sha256>` with a long immutable cache and CORS. No tool in these repositories opens a socket or spawns ssh.
+- Publishing is outside this package: a store directory is copied unchanged to a static file server, which serves `objects/<2hex>/<sha256>`. No tool in this package opens a socket or spawns ssh.
 
 ## S8. CLI `raa-assets` (src/cli/main.ts)
 
@@ -318,163 +302,59 @@ Exit codes are listed under Conventions.
   - Reinstalling over our own hook is 'unchanged' when the content is identical, else 'updated'.
 - On refusal the hook prints each `  <path>: <reason> (<size> bytes)`, then the fix line `put it in the asset store (raa-assets put <path>) and reference its sha256; see docs/private-assets.md`, and exits 1. There is no bypass list and no per-file exception.
 
-## S10. SDF Modeler -> raa.prims mapping
-
-This is sdfm's `exportRaaPrims`. It uses the rest pose, `localMatrix(n, false)`.
-
-**Walk.**
-
-- The export walks the visible nodes of `doc.root`, recursively. Invisible nodes and their subtrees are skipped, as the compiler skips them.
-- Groups (kind 'group') are flattened. Each primitive gets its transform relative to its nearest exported primitive ancestor, or to the asset frame: the product of the group chain and its own local matrix, decomposed into t, r and s.
-- Decomposition:
-  - t is the translation column, s the lengths of the basis columns, and R the normalised columns.
-  - det < 0 gives EXPORT_MIRROR.
-  - A non-orthonormal R (abs(dot) > 1e-6 or abs(norm - 1) > 1e-6) gives EXPORT_SHEAR.
-  - The quaternion comes from R, with w >= 0.
-
-**Kinds.**
-
-- sphere, capsule, torus and ellipsoid map one to one.
-  - Their params are the registry's clamped effective values (`paramNumber` / `paramVec3`).
-  - Capsule height is max(height, 2·radius).
-  - Node round is ignored for these kinds: 'smooth' RoundSupport changes nothing.
-- box:
-  - round = 0 -> box;
-  - round > 0 with roundStyle round -> roundBox{size, radius = min(round, size/2)};
-  - chamfer -> EXPORT_BEVEL.
-- roundBox -> roundBox{size, radius = max(radius, round)} when it has no advanced option. Taper, shift, edges, corners or an edgeStyle chamfer give EXPORT_SHAPE_OPTION.
-- cylinder:
-  - taper = 1, no cap bevel and round = 0 -> cylinder;
-  - taper ≠ 1 -> cone. With taper <= 1, radiusBottom = radius and radiusTop = radius·taper. With taper > 1, radiusTop = radius and radiusBottom = radius/taper;
-  - a cap bevel or round > 0 -> EXPORT_BEVEL.
-- cone -> cone when round = 0, else EXPORT_BEVEL.
-- Every other kind (sweep, lathe, extrude, nurbsPiece, plane, mesh, image, instance, …) gives EXPORT_UNSUPPORTED_KIND.
-
-**Refusals on node features.**
-
-| feature | code |
-|---|---|
-| smooth > 0 on any exported node | EXPORT_SMOOTH_BLEND |
-| noise ≠ null | EXPORT_NOISE |
-| shell ≠ 0 | EXPORT_SHELL |
-| an enabled deformer, or a lattice ≠ null | EXPORT_DEFORMER |
-| an enabled group modifier | EXPORT_MODIFIER |
-
-**Booleans.** These follow sdfm's fold semantics. A subtract or intersect acts on the accumulator of the PRECEDING union items of the same parent, and a primitive's own shape is the first item.
-
-- Host candidates are the primitives reachable through the preceding union items. Groups count through all their union primitives; cutters never count.
-- When exactly one candidate's world AABB overlaps the cutter's world AABB, that candidate becomes the raa host. The cutter is re-parented under it, with its transform re-expressed in the host frame.
-- Zero candidates give EXPORT_CUT_NO_TARGET. Two or more give EXPORT_CUT_MULTIPLE_TARGETS.
-- A group used as a cutter is accepted only when it holds exactly one primitive, else EXPORT_CUT_GROUP.
-
-**Materials.**
-
-- A node whose `material` is a key of doc.materials maps to that key. The key must match MATERIAL_ID_RE, else EXPORT_ID.
-  - The values come from evaluating `cpuGraphOrNull(def, doc)` at 6 fixed samples: p ∈ {(0,0,0), (0.37,1.3,-0.8), (-2.1,0.4,1.7)} × n ∈ {+Y, +X}, with pn = p and neutral masks.
-  - If any channel differs by more than 1e-4 between samples: EXPORT_MATERIAL_NOT_FLAT. A null graph (no CPU twin): EXPORT_MATERIAL_UNSUPPORTED.
-  - color = baseColor clamped to [0,1]; roughness and metallic clamped to [0,1]; emissive clamped to [0,100].
-- A node with no material maps to `color_<rrggbb>` (from node.color): color = the linear value of the hex, roughness 0.5, metallic 0, emissive [0,0,0].
-
-**Anchors.** Every visible anchor node at any depth becomes an anchor, keyed by its node name, with its world rest transform {t, r}. A duplicate or invalid name gives EXPORT_ANCHOR_NAME.
-
-**Collision.** If any exported primitive has `gameCollision === true`, the mode is 'override' with `deriveColliders(asset, id => flagged.has(id))`. Otherwise the mode is 'derived'.
-
-**Identity and budget.**
-
-- id is the option id, or else the slug of doc.name: lowercased, runs of characters outside [a-z0-9_.-] become '-', and leading and trailing '-' are trimmed. It must match ASSET_ID_RE, else EXPORT_ID.
-- name is doc.name, 1..128 chars, else EXPORT_ID.
-- budget is {triangles: the option or 1500, segments: the option or doc.settings.export.poly.segments, rounded up to a multiple of 4}.
-- No exportable primitive gives EXPORT_EMPTY.
-
-**Final check.**
-
-- The asset goes through `serializeRaaPrims` and `parseRaaPrims`. Any tools issue (CAP_*, BUDGET_EXCEEDED, BOOL_*…) becomes the refusal EXPORT_INVALID, carrying the tools code and the node names.
-- All refusals are collected. Each one is `{code, nodes: [{id, name}], message, fix}` in plain words, and the fix says what to change in the app.
-
 ## S11. Evidence files
 
 Evidence files are committed JSON. They never hold secrets, binaries, URLs or absolute paths.
 
-- raa-assets-tools `evidence/m2-real-store.json`:
+- `evidence/store-real.json` (written by `proof/store-real.ts`):
   - Shape: `{store: {kind: 'local', layout: 'objects/<2hex>/<sha256>', isDefaultDir}, object: {sha256, size, created, key}, storedFile: {sha256}, get: {sha256, size, bytesEqual}, manifest: {sha256, size, key, storedFile: {sha256}, entrySha256}, stat: {objects, bytes}, recordedAt}`.
   - Format: 2-space indent and a trailing LF.
-- sdfm `proof/raa-export/ui/evidence.json`:
-  - Shape: `{scenario: 'raa-export-app', topic: 'raa-export-ui', page_ref, adapter, width, height, runs: {ok: {steps, facts}, refused: {steps, facts}}, images: [{name, sha256, bytes, url|null}]}`.
-  - PNGs are written to the git-ignored `out/raa-export/ui/`.
-- raa-assets-tools `runs/obstacles-v0/evidence.json`:
-  - Shape: `{run: 'obstacles-v0', toolsCommit, sdfmCommit, store: {kind: 'local', layout: 'objects/<2hex>/<sha256>'}, assets: [{name, id, logical, anchors, moving, triangles, budget, nodes, sha256, size, key, source: {sha256, size, key}}], manifest: {name: 'rf.assets.obstacles-v0', sha256, size, key, storedFile: {sha256}, get: {sha256, size}}, contactSheet: {sha256, size, key, renderer: 'host-webgpu'|'browser-webgpu', width, height}}`.
-  - `runs/obstacles-v0/manifest.json` holds the exact canonical manifest bytes.
-
-## S12. Royal Fiesta asset set v0
-
-Logical names are `rf.obstacle.<name>` and `rf.character.bean`, and the asset id equals the logical name. Every asset has budget 1500 at LOD0. A moving part is a root node with id `moving`, placed at its pivot anchor.
-
-| name | footprint (m, approx.) | required anchors | notes |
-|---|---|---|---|
-| spinning-bar | 7 × 1.6 × 7 | pivot | base post + 6 m bar (moving) |
-| pendulum-hammer | 4 × 5 × 2 | pivot | frame beam + arm + cylinder head (moving) |
-| see-saw | 6 × 1.2 × 2 | pivot | plank (moving) on a wedge or cylinder pivot |
-| rotating-door | 3 × 3 × 0.6 | pivot | frame + door panel (moving) |
-| bouncy-pad | 2.2 × 0.4 × 2.2 | bounce | disc + torus rim |
-| conveyor-belt | 8 × 0.6 × 2.4 | beltStart, beltEnd | rounded deck + rollers |
-| gap-platform | 8 × 0.6 × 3 | landing | two platforms with a 2 m gap |
-| wall-with-hole | 4 × 3 × 0.5 | passage | box minus a cylinder (subtract) |
-| swinging-gate | 3.5 × 2.5 × 0.4 | hinge | posts + gate panel (moving) |
-| start-finish-arch | 8 × 5 × 1.5 | line | pillars + torus or box arch |
-| bean (character) | 0.8 × 1.4 × 0.8 | spawn, head, handL, handR | capsule body, sphere eyes, cheerful colour |
+- `runs/obstacles-v0/evidence.json`: the evidence of the example run. Its shape is described in `runs/README.md`.
 
 ## Module ownership
 
-| Module | Repo | Milestone | Consumes |
-|---|---|---|---|
-| package-base | raa-assets-tools | M1 | — |
-| format-types | raa-assets-tools | M1 | — |
-| format-geometry | raa-assets-tools | M1 | format-types |
-| format-validator | raa-assets-tools | M1 | format-types, format-geometry |
-| format-writer | raa-assets-tools | M1 | format-types, format-geometry, format-validator |
-| format-api | raa-assets-tools | M1 | format-types, format-geometry, format-validator, format-writer |
-| conformance-fixtures | raa-assets-tools | M1 | format-api |
-| proof-kit | raa-assets-tools | M1 | — |
-| m1-proof | raa-assets-tools | M1 | proof-kit, format-api, conformance-fixtures |
-| manifest-format | raa-assets-tools | M2 | format-api |
-| store-client | raa-assets-tools | M2 | format-api, manifest-format |
-| cli | raa-assets-tools | M2 | format-api, manifest-format, store-client |
-| m2-proof | raa-assets-tools | M2 | proof-kit, cli, store-client, manifest-format |
-| git-guard | raa-assets-tools | M3 | store-client, cli |
-| m3-proof | raa-assets-tools | M3 | proof-kit, git-guard |
-| vendor-pack | raa-assets-tools | M4 | package-base, git-guard |
-| raa-tools-vendor | sdfm | M4 | vendor-pack |
-| raa-export-core | sdfm | M4 | raa-tools-vendor |
-| raa-export-tool | sdfm | M4 | raa-export-core |
-| raa-export-proof | sdfm | M4 | raa-export-core, raa-export-tool |
-| raa-export-ui | sdfm | M5 | raa-export-core |
-| raa-export-ui-proof | sdfm | M5 | raa-export-ui, raa-export-core |
-| obstacles-run | raa-assets-tools | M6 | proof-kit, manifest-format, cli, format-api, store-client |
+| Module | Consumes |
+|---|---|
+| package-base | — |
+| format-types | — |
+| format-geometry | format-types |
+| format-validator | format-types, format-geometry |
+| format-writer | format-types, format-geometry, format-validator |
+| format-api | format-types, format-geometry, format-validator, format-writer |
+| conformance-fixtures | format-api |
+| proof-kit | — |
+| format-proof | proof-kit, format-api, conformance-fixtures |
+| manifest-format | format-api |
+| store-client | format-api, manifest-format |
+| cli | format-api, manifest-format, store-client |
+| store-proof | proof-kit, cli, store-client, manifest-format |
+| git-guard | store-client, cli |
+| guard-proof | proof-kit, git-guard |
+| vendor-pack | package-base, git-guard |
+| example-run | proof-kit, manifest-format, cli, format-api, store-client (see `runs/README.md`) |
 
 ## Module: package-base
-
-Repo: raa-assets-tools.
 
 Files: `package.json`, `tsconfig.json`, `tsconfig.check.json`, `.gitignore`, `README.md`, `LICENSE`, `docs/format.md`.
 
 - `package.json`:
   - name `@etcito/raa-assets-tools`, `"type": "module"`, MIT, engines node >= 22.18;
-  - all subpath exports ('.', './manifest', './node', './schema', './package.json') and the bin `raa-assets`, so later milestones only add files;
-  - scripts: `build` (`tsc -p tsconfig.json`), `typecheck` (`tsc -p tsconfig.check.json`), `test` (`node --test test/`);
+  - all subpath exports ('.', './manifest', './node', './schema', './package.json') and the bin `raa-assets`;
+  - scripts: `build` (`tsc -p tsconfig.json`), `typecheck` (`tsc -p tsconfig.check.json`), `test` (`node --test "test/**/*.test.ts"`), `release:pack`;
   - zero runtime dependencies.
 - `tsconfig.json` and `tsconfig.check.json`: as described under Conventions.
 - `.gitignore`: `node_modules/`, `dist/`, `out/` (which also holds the worktree store), `*.tsbuildinfo`.
 - `README.md`:
-  - purpose and the brick rule (the package works without RAA, Royal Fiesta and sdfm);
+  - purpose and scope: the package depends on no game, engine or editor;
   - quick start (`node src/cli/main.ts validate fixtures/valid/*.json`);
   - links to docs/format.md, docs/store.md and docs/private-assets.md;
-  - the store rule: the asset store is a local directory chosen by `--store <dir>`, `RAA_ASSETS_STORE_DIR` or the default `/root/nmc/asset-store/royal-fiesta/`. No store credentials are used. Committed files, logs and evidence never contain absolute store paths, hosts, users or keys. Asset binaries never go to git.
-- `docs/format.md`: S1 to S5 explained for RAA implementers, including the refusal table.
+  - the store rule: the store is a local directory chosen by `--store <dir>`, `RAA_ASSETS_STORE_DIR` or the default `~/.raa-assets/store/`. No store credentials are used. Committed files, logs and evidence never contain absolute store paths, hosts, users or keys. Asset binaries never go to git.
+- `docs/format.md`: S1 to S5 explained for implementers, including the refusal table.
 - `LICENSE`: MIT, unchanged.
 
 ## Module: format-types
 
-Repo: raa-assets-tools. Browser-safe.
+Browser-safe.
 
 Files: `src/format/types.ts`, `src/format/constants.ts`, `src/format/errors.ts`, `schema/raa.prims.v0.schema.json`, `test/format/schema.test.ts`.
 
@@ -541,7 +421,7 @@ Caps, booleans, the budget and collision equality are the TypeScript validator's
 
 ## Module: format-geometry
 
-Repo: raa-assets-tools. Browser-safe pure functions. Inputs are assumed structurally valid: the validator calls these functions only after the structure checks pass.
+Browser-safe pure functions. Inputs are assumed structurally valid: the validator calls these functions only after the structure checks pass.
 
 Files: `src/format/math.ts`, `src/format/bounds.ts`, `src/format/triangles.ts`, `src/format/colliders.ts`, `test/format/math.test.ts`, `test/format/triangles.test.ts`, `test/format/colliders.test.ts`.
 
@@ -582,7 +462,7 @@ Tests cover:
 
 ## Module: format-validator
 
-Repo: raa-assets-tools. Browser-safe.
+Browser-safe.
 
 Files: `src/format/validate.ts`, `src/format/parse.ts`, `src/format/validate-util.ts`, `src/format/validate-top.ts`, `src/format/validate-nodes.ts`, `src/format/validate-rules.ts`, `src/format/validate-collision.ts`, and the tests `test/format/validate.test.ts`, `test/format/validate-util.test.ts`, `test/format/validate-top.test.ts`, `test/format/validate-nodes.test.ts`, `test/format/validate-rules.test.ts`, `test/format/validate-collision.test.ts`.
 
@@ -677,7 +557,7 @@ Tests cover:
 
 ## Module: format-writer
 
-Repo: raa-assets-tools. Browser-safe.
+Browser-safe.
 
 Files: `src/format/canonical.ts`, `test/format/canonical.test.ts`.
 
@@ -700,19 +580,15 @@ Tests cover:
 
 ## Module: format-api
 
-Repo: raa-assets-tools.
-
 File: `src/index.ts`.
 
 This is the '.' entry. It re-exports every export of format-types (types, constants, RaaError), format-geometry, format-validator (public API) and format-writer. It is browser-safe: it has no `node:` import.
 
 ## Module: conformance-fixtures
 
-Repo: raa-assets-tools.
-
 Files: `fixtures/valid/*.raa.prims.json`, `fixtures/refused/*.json`, `fixtures/expected.json`, `test/format/conformance.test.ts`.
 
-These are the fixtures that RAA's own parser reuses.
+Other implementations of the format are expected to pass these fixtures.
 
 - Size: every fixture is <= 8 KB, except `fixtures/refused/cap_nodes.json` and `fixtures/refused/cap_colliders.json`. Those two must exceed a cap; they are written minified and may be up to 24 KB.
 - `fixtures/valid/`: 11 canonical files, each byte-identical to its own canonical serialization. Together they cover:
@@ -736,8 +612,6 @@ These are the fixtures that RAA's own parser reuses.
 
 ## Module: proof-kit
 
-Repo: raa-assets-tools.
-
 Files: `proof/lib.ts`, `test/proof/lib.test.ts`.
 
 ```ts
@@ -746,7 +620,7 @@ export interface ProofCheck { label: string; run(): Promise<Measure[]> }
 export function measure(label: string, value: number, cmp: '<=' | '>=' | '<' | '>' | '==', threshold: number): Measure
 export function flag(label: string, ok: boolean, detail: string): Measure
 export function proofMode(argv?: string[]): 'quick' | 'full' // '--full' -> full
-export function nmcCpus(): number // integer NMC_CPUS >= 1, default 1
+export function proofCpus(): number // integer PROOF_CPUS >= 1, default 1
 export async function parallelMap<T, R>(items: readonly T[], fn: (item: T, index: number) => Promise<R>, limit?: number): Promise<R[]> // order-preserving, at most limit in flight
 export async function runProof(checks: ProofCheck[], argv?: string[]): Promise<never>
 ```
@@ -758,13 +632,11 @@ export async function runProof(checks: ProofCheck[], argv?: string[]): Promise<n
 - It exits 1 on the first FAIL. An exception exits 2 with the redacted message.
 - At the end it prints `wall <ms> ms` and exits 0.
 
-## Module: m1-proof
+## Module: format-proof
 
-Repo: raa-assets-tools.
+File: `proof/format.ts`.
 
-File: `proof/m1.ts`.
-
-`node proof/m1.ts [--only <regex>]` runs 4 checks:
+`node proof/format.ts [--only <regex>]` runs 4 checks:
 
 - `m1.tests`: spawns `node --test test/format/` and parses the TAP summary. Threshold: fail == 0 and pass >= 1.
 - `m1.conformance`: the conformance-fixtures assertions, counted. It reports the valid count, the refused count and the mismatches (== 0).
@@ -773,7 +645,7 @@ File: `proof/m1.ts`.
 
 ## Module: manifest-format
 
-Repo: raa-assets-tools. This is the './manifest' entry. Browser-safe.
+This is the './manifest' entry. Browser-safe.
 
 Files: `src/manifest/index.ts`, `src/manifest/manifest.ts`, `test/manifest/manifest.test.ts`.
 
@@ -793,14 +665,14 @@ BAD_SIZE means a size that is not an integer in 0..52428800.
 
 ## Module: store-client
 
-Repo: raa-assets-tools. This is the './node' entry, which re-exports hash, redact, store/types, store/local, store/open and store/gc. Node-only.
+This is the './node' entry, which re-exports hash, redact, store/types, store/local, store/open and store/gc. Node-only.
 
 Files: `src/node/index.ts`, `src/node/hash.ts`, `src/node/redact.ts`, `src/node/store/types.ts`, `src/node/store/local.ts`, `src/node/store/open.ts`, `src/node/store/gc.ts`, `test/store/hash.test.ts`, `test/store/local.test.ts`, `test/store/select.test.ts`, `test/store/gc.test.ts`, `test/store/real.test.ts`.
 
 ```ts
 // types.ts
 export const OBJECT_MAX_BYTES = 52428800
-export const STORE_DIR_DEFAULT = '/root/nmc/asset-store/royal-fiesta'
+export const STORE_DIR_DEFAULT = join(homedir(), '.raa-assets', 'store')
 export interface StoreObject { sha256: string; size: number }
 export interface PutResult extends StoreObject { created: boolean; key: string /* objectKey(sha256) */ }
 export interface StoreStat { kind: 'local'; objects: number; bytes: number; freeBytes: number | null }
@@ -842,8 +714,6 @@ Rules:
 
 ## Module: cli
 
-Repo: raa-assets-tools.
-
 Files: `src/cli/main.ts`, `src/cli/args.ts`, `src/cli/types.ts`, `src/cli/commands/put.ts`, `src/cli/commands/get.ts`, `src/cli/commands/ls.ts`, `src/cli/commands/stat.ts`, `src/cli/commands/manifest.ts`, `src/cli/commands/gc.ts`, `src/cli/commands/validate.ts`, `test/cli/cli.test.ts`, `docs/store.md`.
 
 ```ts
@@ -876,19 +746,17 @@ The commands behave exactly as in S8. Store selection always goes through `store
 - the layout and the selection precedence, including the default path;
 - that no credentials exist, and that outputs and evidence never contain absolute store paths;
 - the command outputs and the exit codes;
-- the opt-in test: `RAA_ASSETS_REAL_STORE=1 RAA_ASSETS_STORE_DIR=out/asset-store/royal-fiesta node --test test/store/real.test.ts`;
-- the evidence command: `RAA_ASSETS_STORE_DIR=out/asset-store/royal-fiesta node proof/m2-real-store.ts`;
-- the copy step `cp -a out/asset-store/royal-fiesta/. /root/nmc/asset-store/royal-fiesta/`, after which the owner copies that directory unchanged to the VM store root.
+- the opt-in test: `RAA_ASSETS_REAL_STORE=1 RAA_ASSETS_STORE_DIR=out/asset-store node --test test/store/real.test.ts`;
+- the evidence command: `RAA_ASSETS_STORE_DIR=out/asset-store node proof/store-real.ts`;
+- the publish step, when wanted: `cp -a out/asset-store/. /srv/assets/` (see `docs/store.md`, "Publishing a store").
 
 It has no ssh, public URL, ASSET_STORE_* or CORS text.
 
-## Module: m2-proof
+## Module: store-proof
 
-Repo: raa-assets-tools.
+Files: `proof/store.ts`, `proof/store-real.ts`, `evidence/store-real.json`.
 
-Files: `proof/m2.ts`, `proof/m2-real-store.ts`, `evidence/m2-real-store.json`.
-
-`node proof/m2.ts [--only <regex>]` runs 5 checks. The cases that spawn processes run through `parallelMap`.
+`node proof/store.ts [--only <regex>]` runs 5 checks. The cases that spawn processes run through `parallelMap`.
 
 - `m2.local-roundtrip`: drives the CLI against a temp local store. Measured value: the mismatches (== 0).
   1. Put 2 files.
@@ -903,7 +771,7 @@ Files: `proof/m2.ts`, `proof/m2-real-store.ts`, `evidence/m2-real-store.json`.
   - a later put of the same bytes creates the object;
   - after a successful put the shard directory holds no dot-file (`m2.atomic.no-temp-left`).
 - `m2.store-selection`: with `RAA_ASSETS_STORE_DIR=A` in the child env, a put with `--store B` lands in B and not in A, and a put without `--store` lands in A.
-- `m2.real-store`: reads `evidence/m2-real-store.json` (S11) and requires:
+- `m2.real-store`: reads `evidence/store-real.json` (S11) and requires:
   - `store.kind == 'local'`;
   - `object.key == objects/<2hex>/<object.sha256>`;
   - `storedFile.sha256 == object.sha256`;
@@ -913,7 +781,7 @@ Files: `proof/m2.ts`, `proof/m2-real-store.ts`, `evidence/m2-real-store.json`.
   - `stat.objects >= 2`;
   - no secret: the text contains none of '@', 'BEGIN', '.ssh', 'id_', '/root/', '/home/'.
 
-`proof/m2-real-store.ts` needs `RAA_ASSETS_STORE_DIR` or `--store <dir>`. Without either it fails with USAGE; it never uses the default. It drives the CLI (spawning `src/cli/main.ts --json`):
+`proof/store-real.ts` needs `RAA_ASSETS_STORE_DIR` or `--store <dir>`. Without either it fails with USAGE; it never uses the default. It drives the CLI (spawning `src/cli/main.ts --json`):
 
 1. It puts a timestamped probe text file from `os.tmpdir()`.
 2. It re-hashes `<dir>/<key>`.
@@ -921,11 +789,9 @@ Files: `proof/m2.ts`, `proof/m2-real-store.ts`, `evidence/m2-real-store.json`.
 4. It runs `manifest --name m2.real-store probe=<file>` and re-hashes the stored manifest file.
 5. It reads the entry sha with `manifest --show`.
 6. It runs `stat`.
-7. It writes `evidence/m2-real-store.json` in the S11 shape, with no path.
+7. It writes `evidence/store-real.json` in the S11 shape, with no path.
 
 ## Module: git-guard
-
-Repo: raa-assets-tools.
 
 Files: `src/node/guard/rules.ts`, `src/node/guard/git.ts`, `src/node/guard/hook.ts`, `src/node/guard/install.ts`, `src/node/guard/index.ts`, `src/cli/commands/install-guard.ts`, `src/cli/commands/guard-check.ts`, `docs/private-assets.md`, `test/guard/rules.test.ts`, `test/guard/install.test.ts`, `test/guard/repo-clean.test.ts`.
 
@@ -944,16 +810,14 @@ export async function installGuard(repo: string, opts?: { force?: boolean }): Pr
 ```
 
 - The CLI commands are `install-guard <repo> [--force]` and `guard-check [<repo>] [--tracked]` (S8).
-- `docs/private-assets.md` follows the Monster Racer pattern: why assets stay out of git, the local store, how to install the guard, and what to do when a commit is refused.
+- `docs/private-assets.md`: why assets stay out of git, the local store, how to install the guard, and what to do when a commit is refused.
 - `repo-clean.test.ts` fails when this repository's tracked or staged files violate S9. It is the test that fails if an asset is staged.
 
-## Module: m3-proof
+## Module: guard-proof
 
-Repo: raa-assets-tools.
+File: `proof/guard.ts`.
 
-File: `proof/m3.ts`.
-
-`node proof/m3.ts [--only <regex>]` runs its cases through `parallelMap`. Each case uses a throwaway repo: `git init` in a temp dir, a local user.name and email, then `node src/cli/main.ts install-guard <dir>`. It runs 5 checks:
+`node proof/guard.ts [--only <regex>]` runs its cases through `parallelMap`. Each case uses a throwaway repo: `git init` in a temp dir, a local user.name and email, then `node src/cli/main.ts install-guard <dir>`. It runs 5 checks:
 
 - `m3.refuse-asset`: a staged `fake.png` (valid text bytes) makes `git commit` exit non-zero. The output names `fake.png: asset-extension`, and HEAD has not moved.
 - `m3.refuse-binary-size`: a staged `data.dat` holding a NUL byte and a staged 1048577-byte text file are both refused, each with its reason.
@@ -962,8 +826,6 @@ File: `proof/m3.ts`.
 - `m3.repo-clean`: `guard-check --tracked` on this repository reports 0 violations.
 
 ## Module: vendor-pack
-
-Repo: raa-assets-tools.
 
 Files: `scripts/pack-vendor.ts`, `test/scripts/pack-vendor.test.ts`.
 
@@ -979,242 +841,16 @@ Files: `scripts/pack-vendor.ts`, `test/scripts/pack-vendor.test.ts`.
    - `VENDOR.json` = `{package, version, commit (git rev-parse HEAD), dirty (git status --porcelain non-empty), builtAt (ISO), files: {<relative path>: sha256}}`.
 3. Refuses (exit 1) when any written file would be blocked by the S9 guard rules.
 
-This follows the sdfm `vendor/quadmesh` precedent.
+The npm package does not need this script; it is for applications that copy the package into their own tree.
 
 The exported helper is `packVendor(srcRoot: string, targetDir: string, opts?: { skipBuild?: boolean }): Promise<{ files: number; commit: string }>`. The test runs the file-list and VENDOR.json logic on a fake dist in a temp dir.
 
-## Module: raa-tools-vendor
+## Proofs
 
-Repo: sdfm.
+Each proof prints one `PASS` or `FAIL` line per check and exits non-zero when a check fails. Missing files or fields are `FAIL` lines, never exceptions. `--only <regex>` runs the checks whose label matches.
 
-Files: `vendor/raa-assets-tools/package.json`, `vendor/raa-assets-tools/VENDOR.json`, `vendor/raa-assets-tools/.gitignore`, `vendor/raa-assets-tools/LICENSE`, `vendor/raa-assets-tools/README.md`, `vendor/raa-assets-tools/schema/raa.prims.v0.schema.json`, `vendor/raa-assets-tools/dist/**`.
-
-- This is the vendored built copy of `@etcito/raa-assets-tools`. It is produced only by `node $RAA_ASSETS_TOOLS_DIR/scripts/pack-vendor.ts vendor/raa-assets-tools`, where `RAA_ASSETS_TOOLS_DIR` is the raa-assets-tools checkout given by the lead. That path is never written into sdfm. `VENDOR.json` records the tools commit.
-- The single authorized edit to sdfm's build-config files:
-  - package.json `dependencies` gains `"@etcito/raa-assets-tools": "file:vendor/raa-assets-tools"`;
-  - package-lock.json is updated by `npm install --no-audit --no-fund`;
-  - `node_modules/@etcito/raa-assets-tools` resolves.
-- sdfm code imports only `'@etcito/raa-assets-tools'`, never its './node' entry in src/core or the browser.
-
-## Module: raa-export-core
-
-Repo: sdfm. Pure and browser-safe (no `node:*`). Both the MCP tool and the UI dialog use it.
-
-Files: `src/core/raa-export/export.ts`, `src/core/raa-export/walk.ts`, `src/core/raa-export/transform.ts`, `src/core/raa-export/materials.ts`, `src/core/raa-export/refusals.ts`, `src/core/raa-export/export.test.ts`.
-
-```ts
-export type RaaExportCode = 'EXPORT_SMOOTH_BLEND' | 'EXPORT_UNSUPPORTED_KIND' | 'EXPORT_NOISE' | 'EXPORT_SHELL' | 'EXPORT_DEFORMER' | 'EXPORT_MODIFIER' | 'EXPORT_BEVEL' | 'EXPORT_SHAPE_OPTION' | 'EXPORT_MIRROR' | 'EXPORT_SHEAR' | 'EXPORT_CUT_NO_TARGET' | 'EXPORT_CUT_MULTIPLE_TARGETS' | 'EXPORT_CUT_GROUP' | 'EXPORT_MATERIAL_NOT_FLAT' | 'EXPORT_MATERIAL_UNSUPPORTED' | 'EXPORT_ANCHOR_NAME' | 'EXPORT_ID' | 'EXPORT_EMPTY' | 'EXPORT_INVALID'
-export interface RaaExportRefusal { code: RaaExportCode; toolsCode?: RefusalCode /* EXPORT_INVALID only */; nodes: { id: string; name: string }[]; message: string; fix: string }
-export interface RaaExportOptions { id?: string; budget?: number /* 1..100000, default 1500 */; segments?: number /* 4..128, default doc.settings.export.poly.segments, rounded up to a multiple of 4 */ }
-export type RaaExportResult =
-  | { ok: true; asset: RaaPrimsAsset; text: string /* canonical bytes */; triangles: number; budget: number; counts: { nodes: number; materials: number; anchors: number; colliders: number } }
-  | { ok: false; refusals: RaaExportRefusal[] }
-export function exportRaaPrims(doc: SdfDocument, opts?: RaaExportOptions): RaaExportResult
-export function assetIdFromName(name: string): string // S10 slug
-export function refusalText(refusals: RaaExportRefusal[]): string // one line per refusal: '<message> (<names>) — <fix>'
-// transform.ts
-export const TRANSFORM_TOLERANCE = 1e-6
-export function decomposeTrs(m: Mat4): { ok: true; t: Vec3; r: Quat; s: Vec3 } | { ok: false; code: 'EXPORT_MIRROR' | 'EXPORT_SHEAR' }
-// materials.ts
-export const MATERIAL_FLAT_TOLERANCE = 1e-4
-export function flatMaterial(doc: SdfDocument, key: string): { ok: true; material: RaaMaterial } | { ok: false; code: 'EXPORT_MATERIAL_NOT_FLAT' | 'EXPORT_MATERIAL_UNSUPPORTED' }
-export function colorMaterial(hex: string): { id: string; material: RaaMaterial } // 'color_<rrggbb>'
-```
-
-The mapping follows S10 exactly. It uses sdfm's real code:
-
-- `localMatrix(n, false)` and the doc index (src/core/doc/transform.ts);
-- the `registry.primitive(kind)` ParamSpecs with `paramNumber` / `paramVec3` (src/core/sdf/primitives/basic.ts);
-- `cpuGraphOrNull` (src/core/material-graph/cpu-eval.ts);
-- the deformer, modifier, noise, shell, smooth and round fields of `SdfNode`.
-
-Final serialization and validation go through the vendored `serializeRaaPrims`, `parseRaaPrims` and `deriveColliders`. The document is never mutated.
-
-Tests (`unit.raa-export.*`) cover:
-
-- the mapping per kind, including box + round -> roundBox and tapered cylinder -> cone;
-- group flattening: each primitive's composed matrix equals `worldMatrix(index, id, false)` within 1e-6;
-- cut host resolution with one target, no target, two targets and a group cutter;
-- every RaaExportCode, with the node names in the message;
-- materials: a flat graph, a patterned graph (refused) and colour-only;
-- anchors, and gameCollision -> override;
-- deterministic bytes;
-- a plain-words scan (`uiWordHits`) of every message and fix.
-
-## Module: raa-export-tool
-
-Repo: sdfm.
-
-File: `src/node/ops/raa-prims.ts`.
-
-The file exports `operations: ToolOperation[]` with one tool, `export_raa_prims`:
-
-- title 'Export as raa.prims', mutates false;
-- cli `{command: 'export-raa', positional: ['doc'], flags: {out: 'out', id: 'id', budget: 'budget', segments: 'segments'}}`;
-- inputSchema `{out?: string, id?: string, budget?: integer 1..100000, segments?: integer 4..128}` with additionalProperties false. `out` is a path relative to cwd; the default is `<ctx.outDir>/export_raa_prims/<id>.raa.prims.json`.
-
-run calls `exportRaaPrims(ctx.session.doc(), opts)`:
-
-- Refused: it throws `SdfmError('RAA_EXPORT_REFUSED', refusalText(refusals), 'change or remove the listed shapes, then export again')`, and nothing is written.
-- ok: it writes `text` atomically (temp then rename) and returns:
-  - the text `exported <id>: <n> shapes, <tri> of <budget> triangles, <m> materials, <a> anchors, <c> colliders; wrote <path> (<bytes> bytes, sha256 <hex>)`;
-  - the data `{path, bytes, sha256, id, triangles, budget, counts}`.
-
-The description (<= 400 chars) tells the agent what V1 can express and to check the result with `raa-assets validate <path>`.
-
-## Module: raa-export-proof
-
-Repo: sdfm.
-
-Files: `samples/raa/spinning-bar.sdfm.json`, `samples/raa/wall-hole.sdfm.json`, `samples/raa/bean.sdfm.json`, `samples/raa/refuse-smooth.sdfm.json`, `samples/raa/refuse-sweep.sdfm.json`, `samples/raa/refuse-noise.sdfm.json`, `samples/raa/refuse-shell.sdfm.json`, `samples/raa/refuse-deformer.sdfm.json`, `src/node/proofs/raa-prims.ts`, `scripts/proof/raa-prims.mjs`, `docs/raa-export.md`.
-
-The fixture documents are small canonical `*.sdfm.json` files written with sdfm's serializer:
-
-- spinning-bar: groups, a cylinder, a box, a material graph and a 'pivot' anchor;
-- wall-hole: a box host with a subtract cylinder inside a group;
-- bean: a capsule, two sphere eyes, colour-only materials, 4 anchors and gameCollision on the body;
-- 5 refusal documents, each with exactly one offending construct on a named node.
-
-`node scripts/proof/raa-prims.mjs [--only <regex>]` runs `proof.checks` from `src/node/proofs/raa-prims.ts`, 4 checks:
-
-- `unit.raa-export`: the export.test.ts checks.
-- `raa.fixtures`: each of the 3 documents exports ok; the vendored `parseRaaPrims` is ok; triangles <= budget; re-serialization is byte-identical. It prints the triangles per document.
-- `raa.refusals`: each refuse-* document gives exactly its expected code, and the message contains the offending node's name:
-
-  | document | code |
-  |---|---|
-  | refuse-smooth | EXPORT_SMOOTH_BLEND |
-  | refuse-sweep | EXPORT_UNSUPPORTED_KIND |
-  | refuse-noise | EXPORT_NOISE |
-  | refuse-shell | EXPORT_SHELL |
-  | refuse-deformer | EXPORT_DEFORMER |
-
-- `raa.tool`:
-  - on wall-hole, `callTool(loadOperations(), 'export_raa_prims', {out: <tmp>})` writes a file whose sha256 equals sha256(exportRaaPrims(doc).text);
-  - on refuse-smooth, it throws RAA_EXPORT_REFUSED and no file exists.
-
-`docs/raa-export.md` holds the S10 mapping table, the refusal table (code -> message -> fix), the tool usage and the regeneration commands.
-
-## Module: raa-export-ui
-
-Repo: sdfm.
-
-Files: `src/core/raa-export/ui-model.ts`, `src/core/raa-export/ui-model.test.ts`, `src/app/raa-export/raa-export-actions.ts`, `src/components/raa-export/RaaExportDialog.vue`, `src/plugins/ui/63-raa-export.ts`.
-
-```ts
-// ui-model.ts (pure, Node-tested)
-export interface RaaExportView { state: 'ok' | 'refused'; status: string /* e.g. 'Ready: 704 of 1500 triangles · 5 shapes · 3 materials · 2 anchors' or 'Cannot export: 2 problems' */; rows: { code: RaaExportCode; message: string; fix: string; names: string[] }[]; fileName: string /* '<id>.raa.prims.json' */; text: string | null }
-export function raaExportView(doc: SdfDocument, opts: RaaExportOptions): RaaExportView // calls exportRaaPrims; never throws
-export const RAA_SEGMENT_CHOICES: readonly number[] // [8, 12, 16, 24, 32]
-// raa-export-actions.ts (browser)
-export const raaExportOpen: Ref<boolean>
-export function openRaaExport(): void
-export function downloadRaaExport(view: RaaExportView): void // Blob 'application/vnd.raa.prims+json', anchor download = fileName
-```
-
-The plugin `sdfm-raa-export` registers:
-
-- the toolbar item `raa.export` at order 71.5, right after 'Export…'. It is always visible and needs no pane. It is a `@real3d/atoms` Button with the label 'Export as raa.prims…' and `data-raa-export-open`;
-- the command `raa.export`, with the same label, which opens the dialog.
-
-`RaaExportDialog.vue` (`<script setup lang='ts'>`, atoms controls) contains:
-
-- an asset name field `[data-raa-export-id]`, default `assetIdFromName(doc.name)`;
-- 'Triangle budget' `[data-raa-export-budget]`, default 1500;
-- 'Curve detail' `[data-raa-export-segments]`, with RAA_SEGMENT_CHOICES and the default from the document;
-- the status line `[data-raa-export-status][data-state=ok|refused]` and `[data-raa-export-triangles]`;
-- one row per problem, `[data-raa-export-refusal][data-code]`, showing the message, the fix and the shape names;
-- 'Download' `[data-raa-export-download]` (disabled when refused) and 'Close'.
-
-The dialog recomputes the view on every document or option change. It sets `data-raa-export-sha256` (the crypto.subtle digest of `text`) on `[data-raa-export-dialog]`. All visible text passes section 33. The dialog never writes the document.
-
-## Module: raa-export-ui-proof
-
-Repo: sdfm.
-
-Files: `src/app/gpu-page/scenarios/raa-export-app.ts`, `src/node/evidence/topics/raa-export-ui.ts`, `src/node/proofs/raa-prims-ui.ts`, `scripts/proof/raa-prims-ui.mjs`, `proof/raa-export/ui/evidence.json`, `docs/raa-export-control.md`.
-
-The scenario `raa-export-app` follows section 31: the real App.vue at UI_SHOT 1600×1000, one `setDocument`, then the ui-driver only. Its steps:
-
-1. At load, `[data-raa-export-open]` is hit-testable (elementFromPoint returns it): fact `controlReachable`.
-2. One click opens `[data-raa-export-dialog]`: fact `dialogOpenAfterClicks = 1`.
-3. It reads the status state, the triangle text, the rows (code and names), the dialog sha256, and `uiWordHits` over the dialog text.
-4. It captures the app PNG.
-
-The topic `raa-export-ui` (`node scripts/gpu-evidence.mjs raa-export-ui`):
-
-- runs the scenario twice: 'ok' with samples/raa/wall-hole and 'refused' with samples/raa/refuse-smooth;
-- computes `sha256(exportRaaPrims(doc).text)` in Node for the ok run (fact `toolSha256`);
-- writes `proof/raa-export/ui/evidence.json` (S11). The PNGs go to the git-ignored `out/raa-export/ui/`; only their sha256 and size are recorded, and `url` is null.
-
-`node scripts/proof/raa-prims-ui.mjs [--only <regex>]` runs 4 checks:
-
-- `unit.raa-export-ui`: ui-model.test.ts (status wording, rows, plain words, file name, never throws).
-- `raa.ui.reachable`: controlReachable is true and dialogOpenAfterClicks == 1 in the ok run.
-- `raa.ui.same-bytes`: the dialog sha256 equals toolSha256, and the state is ok.
-- `raa.ui.refused`:
-  - the refused run's state is 'refused';
-  - there is at least one row, with code EXPORT_SMOOTH_BLEND naming the node;
-  - download is disabled;
-  - wordHits == 0 in both runs.
-
-`docs/raa-export-control.md` holds:
-
-- the 'tool <-> control' table:
-
-  | export_raa_prims | app control |
-  |---|---|
-  | the tool | toolbar 'Export as raa.prims…' / command raa.export |
-  | input `out` | Download |
-  | input `id` | asset name |
-  | input `budget` | Triangle budget |
-  | input `segments` | Curve detail |
-  | result text and data | status line and problem rows |
-
-- how to regenerate the evidence;
-- the capture's sha256.
-
-## Module: obstacles-run
-
-Repo: raa-assets-tools.
-
-Files: `runs/obstacles-v0/spec.json`, `runs/obstacles-v0/recipes/*.calls.json`, `runs/obstacles-v0/evidence.json`, `runs/obstacles-v0/manifest.json`, `runs/obstacles-v0/report.md`, `runs/obstacles-v0/dogfood.md`, `proof/m6.ts`.
-
-- `spec.json`: `{assets: [{name, logical, id, file, footprint: Vec3, anchors: string[], budget: 1500, moving: boolean, notes}]}`, 11 entries in S12 order. `logical` is `rf.obstacle.<name>` or `rf.character.bean`, and `id` equals `logical`.
-- `recipes/<name>.calls.json`: an ordered array `[{tool, input}]`:
-  1. `doc_new`;
-  2. ONE `node_add_batch` (parentRef-only nesting, node colours);
-  3. `doc_save` to `out/obstacles-v0/<name>.sdfm.json`;
-  4. `export_raa_prims` with `{out: out/obstacles-v0/<name>.raa.prims.json, id, budget: 1500[, segments]}`.
-- `recipes/contact-sheet.calls.json`: composes the 11 batches under grid groups and ends with `render_views` on the GPU client.
-- Store: the raa.prims files, the source documents, the manifest and the contact sheet are put through the CLI with `RAA_ASSETS_STORE_DIR`. The manifest gets the GC root `rf.assets.obstacles-v0`.
-- `evidence.json`: the S11 shape. It holds no URL, no absolute path and no '@'.
-- `manifest.json`: the exact stored bytes of the manifest `rf.assets.obstacles-v0`. It has 22 entries, all version 1:
-  - `<logical>` -> the raa.prims file;
-  - `<logical>.source` -> the sdfm document.
-- `report.md`: the triangles table, the manifest sha and key, the contact-sheet sha and key, the owner's public-fetch command (`curl -sI https://assets.etcito.com/<key>`: expect 200, immutable caching and CORS), and the exact regeneration commands.
-- `dogfood.md`: what broke, what was done by hand, and what nomorechat or the MCP must do instead. It includes the owner public-fetch step as a friction item.
-
-`node proof/m6.ts [--only <regex>]` runs 5 offline checks. Missing files or fields are FAIL flags, never exceptions.
-
-- `m6.assets`: the evidence names equal the 11 spec names, the ids and logical names match, and every spec anchor is included.
-- `m6.budget`: the worst triangles/budget ratio is <= 1, and every budget is 1500.
-- `m6.manifest`:
-  - parseManifest is ok;
-  - sha256(bytes) and size equal evidence.manifest;
-  - the 22 entries equal the evidence sha, size and contentType;
-  - every entry is <= OBJECT_MAX_BYTES.
-- `m6.store`: `store.kind` is local; the keys equal `objectKey(sha)` for the manifest, the assets and the sources; the manifest `storedFile.sha256` and `get.sha256` equal the manifest sha.
-- `m6.review`:
-  - the contact sheet has a 64-hex sha, a key equal to objectKey, and a GPU renderer (`host-webgpu` or `browser-webgpu`);
-  - report.md and dogfood.md are non-empty;
-  - the evidence is free of '@', '.ssh', 'BEGIN', '/root/' and '/home/'.
-
-## Milestone proofs
-
-- M1 raa.prims v0 format, validator and conformance fixtures: `node proof/m1.ts`
-- M2 Content-addressed store client and raa-assets CLI: `node proof/m2.ts`
-- M3 Git guard keeps assets and binaries out of repositories: `node proof/m3.ts`
-- M4 SDF Modeler exports raa.prims (core mapping + export_raa_prims tool): `node scripts/proof/raa-prims.mjs`
-- M5 'Export as raa.prims…' control in the running SDF Modeler app: `node scripts/proof/raa-prims-ui.mjs`
-- M6 Agent authoring run: 11 Royal Fiesta assets in the store: `node proof/m6.ts`
+- `node proof/format.ts`: format, validator and conformance fixtures (`format-proof`).
+- `node proof/store.ts`: content-addressed store client and CLI (`store-proof`).
+- `node proof/guard.ts`: git guard keeps assets and binaries out of repositories (`guard-proof`).
+- `RAA_ASSETS_STORE_DIR=<dir> node proof/store-real.ts`: a real round trip in a store directory; writes `evidence/store-real.json`.
+- `node runs/obstacles-v0/check.ts`: the example run, checked offline against its committed files.

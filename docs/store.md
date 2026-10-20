@@ -38,7 +38,7 @@ Unknown fields are refused with `UNKNOWN_FIELD`. `validateManifest` and `parseMa
 | `.glb` | `model/gltf-binary` |
 | anything else | `application/octet-stream` |
 
-The game fetches a manifest by its sha256 and then each entry by its sha256.
+A consumer fetches a manifest by its sha256, then each entry it lists by that entry's sha256.
 
 ### Canonical example
 
@@ -79,7 +79,7 @@ A store is one directory (`localStore(root)`):
 
 - `objectKey(sha256)` gives the relative key `objects/<2hex>/<sha256>`. It throws `BAD_HASH` unless the hash matches `^[0-9a-f]{64}$`. The CLI reports this key, never an absolute path.
 - A root name matches `LOGICAL_NAME_RE` (`BAD_ROOT_NAME` otherwise).
-- The layout is the same as the store the game serves from, so a plain copy of the directory works unchanged (see "Copy to the owner's store" below).
+- The layout is plain files, so a store directory can be copied unchanged to any static file server that serves `objects/<2hex>/<sha256>` (see "Publishing a store" below).
 - Objects are immutable. A put of an object that is already there writes nothing and returns `created: false`.
 - Size cap: `OBJECT_MAX_BYTES` = 52428800 (50 MiB). `assertSize(size)` throws `OBJECT_TOO_LARGE` (`<size> bytes is over the 52428800-byte limit`, fix `keep objects under 50 MiB; split or compress the file`). The CLI checks it on the `fs.stat` size before it reads the file. `put` checks it again before any write. A 52428801-byte file is therefore refused without being read, and the store stays unchanged.
 
@@ -105,7 +105,7 @@ Reads: `get(sha256)` reads the file and re-hashes it (`OBJECT_HASH_MISMATCH` on 
 
 1. `--store <dir>` (resolved against the current directory);
 2. env `RAA_ASSETS_STORE_DIR`;
-3. `STORE_DIR_DEFAULT` = `/root/nmc/asset-store/royal-fiesta`, but only if that path already exists as a directory;
+3. `STORE_DIR_DEFAULT` = `~/.raa-assets/store` (under the home directory of the user running the CLI), but only if that path already exists as a directory;
 4. otherwise `NO_STORE` (exit 2): `no asset store is configured and the default store directory does not exist`, fix `pass --store <dir> or set RAA_ASSETS_STORE_DIR`.
 
 An explicit `--store` or `RAA_ASSETS_STORE_DIR` directory is created on the first write. Tests and proofs never use the default directory: they always pass `--store` or `RAA_ASSETS_STORE_DIR`.
@@ -273,15 +273,15 @@ Add one file `src/cli/commands/<name>.ts` that exports `command: CliCommand` (`{
 | command | what it does |
 |---|---|
 | `node --test test/store/ test/manifest/ test/cli/` | store, manifest and CLI tests on temp directories. On some Node versions a bare directory argument does not collect `.ts` files; then use globs, e.g. `node --test "test/cli/**/*.test.ts"` |
-| `RAA_ASSETS_REAL_STORE=1 RAA_ASSETS_STORE_DIR=out/asset-store/royal-fiesta node --test test/store/real.test.ts` | opt-in real-store test: puts a timestamped probe, checks the raw file hash at `<dir>/<key>`, `get`, `has` and `stat().kind`. It is skipped unless both variables are set and never falls back to the default directory |
-| `RAA_ASSETS_STORE_DIR=out/asset-store/royal-fiesta node proof/m2-real-store.ts` | writes `evidence/m2-real-store.json` |
-| `node proof/m2.ts [--only <regex>]` | milestone proof: `m2.local-roundtrip`, `m2.cap`, `m2.atomic`, `m2.store-selection`, `m2.real-store` (offline; it checks the committed evidence) |
+| `RAA_ASSETS_REAL_STORE=1 RAA_ASSETS_STORE_DIR=out/asset-store node --test test/store/real.test.ts` | opt-in real-store test: puts a timestamped probe, checks the raw file hash at `<dir>/<key>`, `get`, `has` and `stat().kind`. It is skipped unless both variables are set and never falls back to the default directory |
+| `RAA_ASSETS_STORE_DIR=out/asset-store node proof/store-real.ts` | writes `evidence/store-real.json` |
+| `node proof/store.ts [--only <regex>]` | proof: `m2.local-roundtrip`, `m2.cap`, `m2.atomic`, `m2.store-selection`, `m2.real-store` (offline; it checks the committed evidence) |
 
 `out/` is git-ignored, so no object bytes reach git.
 
 ### Real-store evidence
 
-`evidence/m2-real-store.json` comes from a real round trip in the store directory:
+`evidence/store-real.json` comes from a real round trip in the store directory:
 
 - a probe object is put;
 - its raw stored file is re-hashed, and the object is read back with `get`;
@@ -290,12 +290,12 @@ Add one file `src/cli/commands/<name>.ts` that exports `command: CliCommand` (`{
 
 The file records `{store: {kind, layout, isDefaultDir}, object: {sha256, size, created, key}, storedFile: {sha256}, get: {sha256, size, bytesEqual}, manifest: {sha256, size, key, storedFile: {sha256}, entrySha256}, stat: {objects, bytes}, recordedAt}`. It holds no absolute path, host, user or key. `m2.real-store` checks the shas and the key, and scans the file for absolute paths and secret patterns.
 
-### Copy to the owner's store
+### Publishing a store
 
-The real-store run writes into the worktree. Merge it into the default store with:
+The real-store run writes into `out/`. To publish those objects, copy the directory unchanged to the web root of a static file server, for example:
 
 ```
-cp -a out/asset-store/royal-fiesta/. /root/nmc/asset-store/royal-fiesta/
+cp -a out/asset-store/. /srv/assets/
 ```
 
-Objects are immutable and content-addressed, so the copy merges safely. The owner then copies that directory to the game's store root unchanged. When `RAA_ASSETS_STORE_DIR` points at the default directory itself, no copy is needed.
+Objects are immutable and content-addressed, so a repeated copy only adds new objects and never overwrites one. If browsers fetch objects directly, serve `objects/` with a long immutable cache and CORS enabled. The tools do not configure the server.

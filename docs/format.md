@@ -1,7 +1,7 @@
 # raa.prims v0 for implementers
 
 This page is for engineers who write their own `raa.prims` parser, mesher or
-collider builder, for example in RAA or Royal Fiesta. It restates the format
+collider builder, for example in a game engine. It restates the format
 rules S1 to S5 in one place. The reference implementation in this package
 (`parseRaaPrims`, `serializeRaaPrims`, `deriveColliders`) follows exactly this
 text, and the conformance fixtures let you check that your parser agrees with it.
@@ -86,7 +86,7 @@ order (`PARAM_ORDER`) and every key is required. Lengths lie in [0.001, 1000]
 - Root nodes and `union` children are separate closed meshes generated in
   place. Nothing is cut.
 - A `subtract` child removes its volume from the mesh of its parent primitive
-  only. An `intersect` child keeps parent ∩ child. RAA does this by exact face
+  only. An `intersect` child keeps parent ∩ child. A mesher does this by exact face
   cutting of the parent mesh by the convex child.
 
 A cut is accepted only when all of these hold:
@@ -127,7 +127,7 @@ also have an absolute value <= 1e6 (`MAX_ABS_NUMBER`), otherwise NUMBER_RANGE.
 
 ## S2. Triangle rule
 
-This is what RAA generates at LOD0, and the arithmetic the validator uses for
+This is what a conforming mesher generates at LOD0, and the arithmetic the validator uses for
 the budget. Let S = `budget.segments` and k = S/4.
 
 | kind | triangles | at S = 16 |
@@ -144,7 +144,7 @@ The asset total is the sum of the primitive triangles over ALL nodes, plus the
 primitive triangles once more for every `subtract` or `intersect` node. This
 extra term is the cut allowance: cutting a parent by a convex child adds at most
 that many triangles. The asset is refused with BUDGET_EXCEEDED when the total is
-greater than `budget.triangles`. RAA must never generate more triangles than
+greater than `budget.triangles`. A mesher must never generate more triangles than
 this count.
 
 Example at S = 16: a box with one cylinder subtract child counts

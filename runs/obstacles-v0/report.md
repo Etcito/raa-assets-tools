@@ -35,7 +35,7 @@ Every budget is 1500 triangles at LOD0. Ratio = triangles / budget. Worst: gap-p
 
 ## 3. Contact sheet (owner review item Q11(a))
 
-Rendered on 2026-10-18 at 08:21 UTC on the GPU client. The sdfm `render_views` tool ran as a job on the host at `NMC_GPU_URL` and returned `renderer=host-webgpu`. The value is copied from the tool result, not written by hand. No Node/Dawn render was used.
+Rendered on 2026-10-18 at 08:21 UTC on the GPU client. The sdfm `render_views` tool ran as a job on the host at `ORCH_GPU_URL` and returned `renderer=host-webgpu`. The value is copied from the tool result, not written by hand. No Node/Dawn render was used.
 
 | field | value |
 |---|---|
@@ -50,19 +50,19 @@ The sheet is a review object only. It is not a manifest entry, and the PNG is no
 Render command (step 3 of section 5), from the root of this repository with the scratch sdfm at `$SDFM`:
 
 ```sh
-# GPU env exactly as the card provides it: NMC_GPU_URL, NMC_GPU_TOKEN, NMC_GPU_PROJECT, NMC_GPU_CLIENT, HTTP_PROXY, NO_PROXY.
-# Page target: NMC_GPU_PAGE_REF if set; otherwise NMC_GPU_REVISION is unset, so sdfm publishes its own page through NMC_GPU_CLIENT.
-env -u NMC_GPU_REVISION NMC_GPU_TIMEOUT_MS=240000 \
+# GPU env exactly as the card provides it: ORCH_GPU_URL, ORCH_GPU_TOKEN, ORCH_GPU_PROJECT, ORCH_GPU_CLIENT, HTTP_PROXY, NO_PROXY.
+# Page target: ORCH_GPU_PAGE_REF if set; otherwise ORCH_GPU_REVISION is unset, so sdfm publishes its own page through ORCH_GPU_CLIENT.
+env -u ORCH_GPU_REVISION ORCH_GPU_TIMEOUT_MS=240000 \
   node "$SDFM/bin/sdfm.mjs" call render_views --doc out/obstacles-v0/contact-sheet.sdfm.json \
   --input '{"views":["iso","front"],"width":768,"height":768,"mode":"shaded","out":"out/obstacles-v0/contact-sheet.png"}' --save
 RAA_ASSETS_STORE_DIR=<store dir> node src/cli/main.ts put out/obstacles-v0/contact-sheet.png
 ```
 
-The `render_views` line printed `render_views out/obstacles-v0/contact-sheet.png (1536x792); cells row-major: 1=iso, 2=front; renderer=host-webgpu`. The `put` line printed `e152f8e8d1093190c4632bd20c0febd2dcd3db49a8edb820f357a4ed4398ad4f  52210  created  objects/e1/e152f8e8d1093190c4632bd20c0febd2dcd3db49a8edb820f357a4ed4398ad4f`. Like the batch cards, it used `RAA_ASSETS_STORE_DIR=out/asset-store/royal-fiesta`, because `STORE_DIR_DEFAULT` does not exist in the sandbox.
+The `render_views` line printed `render_views out/obstacles-v0/contact-sheet.png (1536x792); cells row-major: 1=iso, 2=front; renderer=host-webgpu`. The `put` line printed `e152f8e8d1093190c4632bd20c0febd2dcd3db49a8edb820f357a4ed4398ad4f  52210  created  objects/e1/e152f8e8d1093190c4632bd20c0febd2dcd3db49a8edb820f357a4ed4398ad4f`. Like the batch cards, it used `RAA_ASSETS_STORE_DIR=out/asset-store`, because `STORE_DIR_DEFAULT` does not exist in the sandbox.
 
 ## 4. Store notes
 
-- The run uses the default local store directory, `STORE_DIR_DEFAULT` (the path is in docs/store.md, section on store selection). That directory did not exist in the authoring sandboxes, so every batch put into `RAA_ASSETS_STORE_DIR=out/asset-store/royal-fiesta` instead. Objects are content-addressed, so the keys and sha256 values are the same. docs/store.md gives the merge step into the default directory.
+- The run uses the default local store directory, `STORE_DIR_DEFAULT` (the path is in docs/store.md, section on store selection). That directory did not exist in the authoring sandboxes, so every batch put into `RAA_ASSETS_STORE_DIR=out/asset-store` instead. Objects are content-addressed, so the keys and sha256 values are the same. docs/store.md gives the merge step into the default directory.
 - The owner copies the default store directory **unchanged** to the VM store root. Objects are immutable `objects/<2hex>/<sha256>` files, and `roots/rf.assets.obstacles-v0` holds the manifest sha256.
 - Then the owner runs the public check:
 
@@ -76,19 +76,19 @@ The `render_views` line printed `render_views out/obstacles-v0/contact-sheet.png
 
 ## 5. Regeneration
 
-Step 0: make a runnable scratch sdfm at the sdfm commit above (dogfood items 2, 11 and 24). The siblings must sit next to it, because sdfm declares `file:../NodeGraph` and `file:../TS_PieMenue`:
+Step 0: make a runnable scratch sdfm at the sdfm commit above (dogfood items 2, 11 and 24). The siblings must sit next to it, because sdfm declares `file:<sibling checkout sibling package>` and `file:<sibling checkout sibling package>`:
 
 ```sh
 SCRATCH=<scratch dir>; SDFM=$SCRATCH/sdfm
 mkdir -p "$SDFM"
-ln -s <NodeGraph worktree> "$SCRATCH/NodeGraph"; ln -s <TS_PieMenue worktree> "$SCRATCH/TS_PieMenue"
+ln -s <sibling package worktree> "$SCRATCH/sibling package"; ln -s <sibling package worktree> "$SCRATCH/sibling package"
 git -C <sdfm checkout> archive a6caa04d4909ac9aa8395d273da9a0c4ff1b3b26 | tar -x -C "$SDFM"
 (cd "$SDFM" && npm install --ignore-scripts)
 (cd "$SDFM/vendor/atoms" && npm install)   # its prepare step builds vendor/atoms/dist, which --ignore-scripts skipped
 (cd "$SDFM" && node node_modules/vite/bin/vite.js build --configLoader runner)   # dist/gpu.html, the GPU page sdfm publishes
 ```
 
-Step 1: replay every recipe, one `sdfm call` per line of its calls file. Each recipe ends with `doc_save` (writes `out/obstacles-v0/<name>.sdfm.json`) and `export_raa_prims` (writes `out/obstacles-v0/<name>.raa.prims.json`). Use the card GPU env unchanged (env-var names in section 3) with `NMC_GPU_REVISION` unset, so the `node_add_batch` receipts render on the published sdfm page. `doc_new --save` refuses an existing document file, so the loop removes it first:
+Step 1: replay every recipe, one `sdfm call` per line of its calls file. Each recipe ends with `doc_save` (writes `out/obstacles-v0/<name>.sdfm.json`) and `export_raa_prims` (writes `out/obstacles-v0/<name>.raa.prims.json`). Use the card GPU env unchanged (env-var names in section 3) with `ORCH_GPU_REVISION` unset, so the `node_add_batch` receipts render on the published sdfm page. `doc_new --save` refuses an existing document file, so the loop removes it first:
 
 ```sh
 mkdir -p out/obstacles-v0
@@ -96,7 +96,7 @@ for name in spinning-bar pendulum-hammer see-saw rotating-door swinging-gate bou
   rm -f "out/obstacles-v0/$name.sdfm.json"
   node -e 'for (const c of require(process.argv[1])) console.log(c.tool + "\t" + JSON.stringify(c.input))' "$PWD/runs/obstacles-v0/recipes/$name.calls.json" |
   while IFS="$(printf '\t')" read -r tool input; do
-    env -u NMC_GPU_REVISION NMC_GPU_TIMEOUT_MS=240000 \
+    env -u ORCH_GPU_REVISION ORCH_GPU_TIMEOUT_MS=240000 \
       node "$SDFM/bin/sdfm.mjs" call "$tool" --doc "out/obstacles-v0/$name.sdfm.json" --input "$input" --save < /dev/null || exit 1
   done || break
 done
@@ -106,7 +106,7 @@ MCP equivalent: start `node "$SDFM/bin/sdfm.mjs" mcp` with the same env and send
 
 Without a reachable GPU page, the `node_add_batch` receipt prints `PAGE_BUILD_FAILED`, `GPU_HOST_UNREACHABLE` or `GPU_JOB_FAILED`. The edit is still committed and the replay carries on, but each call then takes up to about 100 s (dogfood items 3, 8 and 22).
 
-Verified on 2026-10-18 between 08:18 and 08:21 UTC with sdfm `a6caa04`. Each sdfm call published the page through `NMC_GPU_CLIENT`, and all 11 receipts rendered on the GPU host (`feedback ok`; the first one took 15 s cold, the rest about 1 s). The whole loop took about 2 minutes. All 22 output files hash to the `sha256` values in `evidence.json`. On an earlier run, step 2 against an empty temp store printed manifest sha256 `e9f5556a27e86135ec388c73ea16487cc26ad2db7b8683bcc4531d76be402317` (4940 bytes). That stored manifest is byte-identical to `manifest.json`, and the root file holds that sha.
+Verified on 2026-10-18 between 08:18 and 08:21 UTC with sdfm `a6caa04`. Each sdfm call published the page through `ORCH_GPU_CLIENT`, and all 11 receipts rendered on the GPU host (`feedback ok`; the first one took 15 s cold, the rest about 1 s). The whole loop took about 2 minutes. All 22 output files hash to the `sha256` values in `evidence.json`. On an earlier run, step 2 against an empty temp store printed manifest sha256 `e9f5556a27e86135ec388c73ea16487cc26ad2db7b8683bcc4531d76be402317` (4940 bytes). That stored manifest is byte-identical to `manifest.json`, and the root file holds that sha.
 
 Step 2: validate, put, and build the manifest with its GC root. Leave out `RAA_ASSETS_STORE_DIR` to use the default directory, or set it to a store directory of your choice:
 
@@ -143,4 +143,4 @@ The last command prints `manifest e9f5556a27e86135ec388c73ea16487cc26ad2db7b8683
 
 Step 3: compose and render the contact sheet. Replay `recipes/contact-sheet.calls.json` with the step 1 loop (`name` = contact-sheet). Its last call is the `render_views` command of section 3, which writes `out/obstacles-v0/contact-sheet.png`. Then `put` it as section 3 shows, and record `contactSheet` from the `put` line and the `renderer=` value printed by `render_views`. The replay took about 22 s on 2026-10-18, render included.
 
-Step 4: run the proof with `node proof/m6.ts`. It must print 5 groups of PASS lines and exit 0.
+Step 4: run the proof with `node runs/obstacles-v0/check.ts`. It must print 5 groups of PASS lines and exit 0.

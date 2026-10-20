@@ -1,13 +1,13 @@
-# Private assets: keeping binaries out of git (Monster Racer pattern)
+# Keeping binaries out of git
 
-Binary references and game assets are never committed. The repository commits only a small JSON index of `{file, sha256}` (and `size`) that points into the content-addressed asset store. The bytes live outside git. A pre-commit guard enforces this, and its refusal message points to this page.
+Binary references and exported assets are never committed. The repository commits only a small JSON index of `{file, sha256}` (and `size`) that points into the content-addressed asset store. The bytes live outside git. A pre-commit guard enforces this, and its refusal message points to this page.
 
 ## Why assets stay out of git
 
 - History is permanent and clones grow. A binary committed once stays in every clone forever, even after it is deleted.
 - Binaries cannot be reviewed as diffs. A reviewer sees "binary files differ" and nothing else.
 - Assets are versioned by sha256 in the store instead. An object is immutable and named by the hash of its bytes, so a changed asset is a new object and the old one is never overwritten.
-- The project rule: no asset or binary is ever committed to any repository. Captures, exported game assets and authored source documents go to the store, or to a git-ignored `out/` directory. Committed evidence is JSON or markdown that records their sha256, byte size and store key.
+- The rule: no asset or binary is committed to any repository. Captures, exported assets and authored source documents go to the store, or to a git-ignored `out/` directory. Committed evidence is JSON or markdown that records their sha256, byte size and store key.
 
 `.gitignore` already ignores `out/` and the usual asset extensions (`*.glb`, `*.gltf`, `*.png`, `*.jpg`, `*.avif`, `*.ktx2`, `*.bin`). The guard below is the second line of defence: it also catches `.jpeg`, binary content and large files, and a forced `git add -f`.
 
