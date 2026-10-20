@@ -13,3 +13,7 @@ pkg/
 *.avif
 *.ktx2
 *.bin
+.nmc
+release/
+.env
+.env.*

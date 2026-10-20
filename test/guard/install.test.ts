@@ -56,24 +56,27 @@ test('hookScript is a standalone node script with the rules inlined', () => {
   assert.ok(!/\bimport\s*\(/.test(script))
 })
 
-test('install, reinstall, update', async () => {
+// POSIX permission bits do not exist on Windows, so the 0755 checks run only where they mean something.
+const POSIX = process.platform !== 'win32'
+
+test('install, reinstall, update', { skip: !POSIX && 'POSIX file modes' }, async () => {
   const repo = await tempRepo()
   const first = await installGuard(repo)
   assert.equal(first.action, 'installed')
   assert.equal(first.backup, null)
   assert.equal(first.hookPath, join(await git(repo, 'rev-parse', '--show-toplevel').then((s) => s.trim()), '.git', 'hooks', 'pre-commit'))
-  assert.equal((await stat(first.hookPath)).mode & 0o777, 0o755)
+  if (POSIX) assert.equal((await stat(first.hookPath)).mode & 0o777, 0o755)
   assert.equal(await readFile(first.hookPath, 'utf8'), hookScript())
 
   const again = await installGuard(repo)
   assert.equal(again.action, 'unchanged')
-  assert.equal((await stat(again.hookPath)).mode & 0o777, 0o755)
+  if (POSIX) assert.equal((await stat(again.hookPath)).mode & 0o777, 0o755)
 
   await writeFile(first.hookPath, `#!/usr/bin/env node\n// ${GUARD_MARKER} old version\n`, { mode: 0o644 })
   const updated = await installGuard(repo)
   assert.equal(updated.action, 'updated')
   assert.equal(await readFile(first.hookPath, 'utf8'), hookScript())
-  assert.equal((await stat(first.hookPath)).mode & 0o777, 0o755)
+  if (POSIX) assert.equal((await stat(first.hookPath)).mode & 0o777, 0o755)
 })
 
 test('a foreign hook is refused without force and backed up with force', async () => {
