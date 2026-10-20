@@ -1,9 +1,13 @@
 {
   "name": "@etcito/raa-assets-tools",
   "version": "0.1.0",
+  "description": "Format, validator, canonical writer, content-addressed asset store and raa-assets CLI for raa.prims primitive assets.",
   "type": "module",
   "license": "MIT",
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Etcito/raa-assets-tools.git"
+  },
   "engines": {
     "node": ">=22.18"
   },
@@ -36,10 +40,12 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.check.json",
-    "test": "node --test test/"
+    "test": "node --test \"test/**/*.test.ts\"",
+    "prepack": "npm run build",
+    "release:pack": "node scripts/release-pack.mjs"
   },
   "devDependencies": {
-    "typescript": "^6.0.3",
-    "@types/node": "^22.18.0"
+    "@types/node": "^22.18.0",
+    "typescript": "^6.0.3"
   }
 }
