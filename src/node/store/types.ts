@@ -1,7 +1,10 @@
+import { homedir } from 'node:os'
+import { join } from 'node:path'
 import { RaaError } from '../../format/errors.ts'
 
 export const OBJECT_MAX_BYTES = 52428800
-export const STORE_DIR_DEFAULT = '/root/nmc/asset-store/royal-fiesta'
+// Used only when no --store and no RAA_ASSETS_STORE_DIR is given, and only if the directory exists.
+export const STORE_DIR_DEFAULT = join(homedir(), '.raa-assets', 'store')
 
 export interface StoreObject {
   sha256: string

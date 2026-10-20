@@ -35,15 +35,15 @@ export function proofMode(argv: string[] = process.argv.slice(2)): 'quick' | 'fu
   return argv.includes('--full') ? 'full' : 'quick';
 }
 
-export function nmcCpus(): number {
-  const value = Number(process.env.NMC_CPUS);
+export function proofCpus(): number {
+  const value = Number(process.env.PROOF_CPUS);
   return Number.isSafeInteger(value) && value >= 1 ? value : 1;
 }
 
 export async function parallelMap<T, R>(
   items: readonly T[],
   fn: (item: T, index: number) => Promise<R>,
-  limit: number = nmcCpus(),
+  limit: number = proofCpus(),
 ): Promise<R[]> {
   if (!Number.isSafeInteger(limit) || limit < 1) {
     throw new RangeError('parallelMap limit must be an integer >= 1');

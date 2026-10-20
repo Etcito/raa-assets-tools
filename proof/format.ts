@@ -1,11 +1,11 @@
-// M1 proof: raa.prims v0 format, validator and conformance fixtures.
-// node proof/m1.ts [--only <regex>]
+// Format proof: raa.prims v0 format, validator and conformance fixtures.
+// node proof/format.ts [--only <regex>]
 import { spawn } from 'node:child_process';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { REFUSAL_CODES, parseRaaPrims, serializeRaaPrims } from '../src/index.ts';
 import type { RaaValidation, RefusalCode } from '../src/index.ts';
-import { flag, measure, nmcCpus, runProof } from './lib.ts';
+import { flag, measure, proofCpus, runProof } from './lib.ts';
 import type { Measure, ProofCheck } from './lib.ts';
 
 interface Expected {
@@ -37,7 +37,7 @@ const sameList = (a: readonly string[], b: readonly string[]) =>
 
 function runTests(): Promise<{ code: number | null; out: string }> {
   // Node does not collect .ts files from a bare directory argument, so the glob is used.
-  const args = ['--test', '--test-reporter=tap', `--test-concurrency=${nmcCpus()}`, 'test/format/**/*.test.ts'];
+  const args = ['--test', '--test-reporter=tap', `--test-concurrency=${proofCpus()}`, 'test/format/**/*.test.ts'];
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
     let out = '';

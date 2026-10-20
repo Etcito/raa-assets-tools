@@ -1,5 +1,5 @@
-// M2 proof: content-addressed store client and raa-assets CLI.
-// node proof/m2.ts [--only <regex>]
+// Store and CLI proof: content-addressed store client and raa-assets CLI.
+// node proof/store.ts [--only <regex>]
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import { mkdir, mkdtemp, readdir, readFile, rm, truncate, writeFile } from 'node:fs/promises';
@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { RaaError } from '../src/index.ts';
 import { localStore, objectKey, sha256Hex, STORE_DIR_DEFAULT } from '../src/node/index.ts';
 import { main } from '../src/cli/main.ts';
-import { flag, measure, nmcCpus, parallelMap, runProof } from './lib.ts';
+import { flag, measure, proofCpus, parallelMap, runProof } from './lib.ts';
 import type { Measure, ProofCheck } from './lib.ts';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
@@ -75,7 +75,7 @@ const localRoundtrip: ProofCheck = {
         ['stat', '--store', store],
         ['gc', '--dry-run', '--store', store],
       ];
-      const results = await parallelMap(reads, (args) => cliJson<unknown>(args), nmcCpus());
+      const results = await parallelMap(reads, (args) => cliJson<unknown>(args), proofCpus());
       const gets = results.slice(0, put.objects.length) as GetJson[];
       const [show, ls, stat, gc] = results.slice(put.objects.length) as [ShowJson, LsJson, StatJson, GcJson];
 
@@ -247,9 +247,9 @@ const realStore: ProofCheck = {
   async run(): Promise<Measure[]> {
     let text: string;
     try {
-      text = await readFile(join(ROOT, 'evidence', 'm2-real-store.json'), 'utf8');
+      text = await readFile(join(ROOT, 'evidence', 'store-real.json'), 'utf8');
     } catch {
-      return [flag('m2.real-store.evidence', false, 'evidence/m2-real-store.json missing')];
+      return [flag('m2.real-store.evidence', false, 'evidence/store-real.json missing')];
     }
     const evidence = JSON.parse(text) as RealStoreEvidence;
     const found = ['@', 'BEGIN', '.ssh', 'id_', '/root/', '/home/'].filter((pattern) => text.includes(pattern));

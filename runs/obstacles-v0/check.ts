@@ -1,15 +1,15 @@
-// M6 proof: the obstacles-v0 agent authoring run, checked offline against the committed run files.
-// node proof/m6.ts [--only <regex>]
+// Checks the obstacles-v0 example run (example data, see ../README.md) offline against its committed files.
+// node runs/obstacles-v0/check.ts [--only <regex>]
 // Never touches the network or the store; a missing file or field is a FAIL flag, never an exception.
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseManifest } from '../src/manifest/index.ts';
-import { OBJECT_MAX_BYTES, objectKey, sha256Hex } from '../src/node/index.ts';
-import { flag, measure, runProof } from './lib.ts';
-import type { Measure, ProofCheck } from './lib.ts';
+import { parseManifest } from '../../src/manifest/index.ts';
+import { OBJECT_MAX_BYTES, objectKey, sha256Hex } from '../../src/node/index.ts';
+import { flag, measure, runProof } from '../../proof/lib.ts';
+import type { Measure, ProofCheck } from '../../proof/lib.ts';
 
-const ROOT = fileURLToPath(new URL('../', import.meta.url));
+const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const RUN = 'runs/obstacles-v0';
 const SPEC_COUNT = 11;
 const BUDGET = 1500;

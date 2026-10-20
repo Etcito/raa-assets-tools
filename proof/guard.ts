@@ -1,11 +1,11 @@
-// M3 proof: git guard keeps assets and binaries out of repositories.
-// node proof/m3.ts [--only <regex>]
+// Git guard proof: git guard keeps assets and binaries out of repositories.
+// node proof/guard.ts [--only <regex>]
 import { spawn } from 'node:child_process';
 import { chmod, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { delimiter, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { flag, measure, nmcCpus, parallelMap, runProof } from './lib.ts';
+import { flag, measure, proofCpus, parallelMap, runProof } from './lib.ts';
 import type { Measure, ProofCheck } from './lib.ts';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
@@ -107,7 +107,7 @@ const refuseBinarySize: ProofCheck = {
     const results = await parallelMap(cases, (c) => withRepo(c.name, async (dir) => {
       const { commit } = await stageAndCommit(dir, { [c.file]: c.content });
       return { c, commit, output: commit.stdout + commit.stderr };
-    }), nmcCpus());
+    }), proofCpus());
     return results.flatMap(({ c, commit, output }) => [
       flag(`m3.refuse-binary-size.${c.name}.exit`, commit.code !== 0, `exit ${commit.code}`),
       flag(`m3.refuse-binary-size.${c.name}.named`, output.includes(c.needle), firstLine(output, c.needle)),
@@ -164,7 +164,7 @@ const install: ProofCheck = {
           flag('m3.install.new-hook', fresh.includes('raa-assets-guard v1'), fresh.includes('raa-assets-guard v1') ? 'hook has raa-assets-guard v1' : 'marker missing'),
         ];
       }, false);
-    }, nmcCpus());
+    }, proofCpus());
     return results.flat();
   },
 };

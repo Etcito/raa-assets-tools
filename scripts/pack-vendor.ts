@@ -1,6 +1,8 @@
-// Packs a built copy of this package into a vendor tree (sdfm vendor/raa-assets-tools),
-// following the sdfm vendor/quadmesh precedent: dist, schema, LICENSE, README, a reduced
-// package.json, a .gitignore re-including dist/, and VENDOR.json written last.
+// OPTIONAL. Packs a built copy of this package into a vendor directory for an application that
+// copies the package into its own tree instead of installing it from npm. The npm package does not
+// need this script. The vendor tree holds dist, schema, LICENSE, README, a reduced package.json, a
+// .gitignore that re-includes dist/, and VENDOR.json (source commit and file hashes), written last.
+// Usage: node scripts/pack-vendor.ts <targetDir>
 import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import * as fs from 'node:fs/promises'

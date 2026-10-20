@@ -1,5 +1,5 @@
-// Real local-store round trip: writes evidence/m2-real-store.json.
-// RAA_ASSETS_STORE_DIR=<dir> node proof/m2-real-store.ts   or   node proof/m2-real-store.ts --store <dir>
+// Real local-store round trip: writes evidence/store-real.json.
+// RAA_ASSETS_STORE_DIR=<dir> node proof/store-real.ts   or   node proof/store-real.ts --store <dir>
 // It never falls back to the default store directory.
 import { spawn } from 'node:child_process';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
@@ -11,7 +11,7 @@ import { objectKey, redactSecrets, sha256File, STORE_DIR_DEFAULT } from '../src/
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const CLI = 'src/cli/main.ts';
-const EVIDENCE = join(ROOT, 'evidence', 'm2-real-store.json');
+const EVIDENCE = join(ROOT, 'evidence', 'store-real.json');
 const STORE_ENV = ['ASSET_STORE_SSH', 'ASSET_STORE_KEY', 'ASSET_STORE_ROOT', 'ASSET_STORE_URL', 'RAA_ASSETS_STORE_DIR'];
 
 interface PutJson { objects: Array<{ file: string; sha256: string; size: number; created: boolean; key: string }> }
@@ -47,7 +47,7 @@ function cliJson<T>(args: string[]): Promise<T> {
 }
 
 async function roundTrip(dir: string): Promise<object> {
-  const tmp = await mkdtemp(join(tmpdir(), 'raa-m2-real-'));
+  const tmp = await mkdtemp(join(tmpdir(), 'raa-store-real-'));
   try {
     const store = ['--store', dir];
     const recordedAt = new Date().toISOString();

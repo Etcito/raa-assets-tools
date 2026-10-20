@@ -7,7 +7,7 @@ import {
   flag,
   formatMeasure,
   measure,
-  nmcCpus,
+  proofCpus,
   parallelMap,
   proofMode,
 } from '../../proof/lib.ts';
@@ -47,19 +47,19 @@ test('proofMode defaults to quick and recognises --full', (t) => {
   assert.equal(proofMode(), 'full');
 });
 
-test('nmcCpus reads a positive integer and otherwise defaults to 1', (t) => {
-  const original = process.env.NMC_CPUS;
+test('proofCpus reads a positive integer and otherwise defaults to 1', (t) => {
+  const original = process.env.PROOF_CPUS;
   t.after(() => {
-    if (original === undefined) delete process.env.NMC_CPUS;
-    else process.env.NMC_CPUS = original;
+    if (original === undefined) delete process.env.PROOF_CPUS;
+    else process.env.PROOF_CPUS = original;
   });
-  delete process.env.NMC_CPUS;
-  assert.equal(nmcCpus(), 1);
+  delete process.env.PROOF_CPUS;
+  assert.equal(proofCpus(), 1);
   for (const [value, expected] of [
     ['3', 3], ['x', 1], ['0', 1], ['-1', 1], ['1.5', 1], ['3x', 1],
   ] as const) {
-    process.env.NMC_CPUS = value;
-    assert.equal(nmcCpus(), expected, value);
+    process.env.PROOF_CPUS = value;
+    assert.equal(proofCpus(), expected, value);
   }
 });
 
@@ -88,13 +88,13 @@ test('parallelMap handles empty input and rejects invalid limits or failed calls
   }), /failed call/);
 });
 
-test('parallelMap defaults to the NMC_CPUS limit', async (t) => {
-  const original = process.env.NMC_CPUS;
+test('parallelMap defaults to the PROOF_CPUS limit', async (t) => {
+  const original = process.env.PROOF_CPUS;
   t.after(() => {
-    if (original === undefined) delete process.env.NMC_CPUS;
-    else process.env.NMC_CPUS = original;
+    if (original === undefined) delete process.env.PROOF_CPUS;
+    else process.env.PROOF_CPUS = original;
   });
-  process.env.NMC_CPUS = '1';
+  process.env.PROOF_CPUS = '1';
   let inFlight = 0;
   await parallelMap([1, 2, 3], async () => {
     assert.equal(++inFlight, 1);

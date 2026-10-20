@@ -1,7 +1,7 @@
 import { test, after } from 'node:test'
 import assert from 'node:assert/strict'
 import { mkdtemp, rm } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
+import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { serializeManifest } from '../../src/manifest/manifest.ts'
 import { gcPlan } from '../../src/node/store/gc.ts'
@@ -85,7 +85,7 @@ test("the './node' entry exposes the store API", () => {
     assert.equal(typeof api[name], 'function', name)
   }
   assert.equal(api.OBJECT_MAX_BYTES, 52428800)
-  assert.equal(api.STORE_DIR_DEFAULT, '/root/nmc/asset-store/royal-fiesta')
+  assert.equal(api.STORE_DIR_DEFAULT, join(homedir(), '.raa-assets', 'store'))
   for (const name of ['sshStore', 'sshArgs', 'remotePutCommand', 'fetchPublic', 'publicUrl', 'PUBLIC_BASE_DEFAULT', 'REMOTE_ROOT_DEFAULT']) {
     assert.equal(name in api, false, `${name} is not exported (local-only store)`)
   }
