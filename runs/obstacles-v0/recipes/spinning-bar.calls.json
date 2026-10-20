@@ -1,0 +1,14 @@
+[
+{"tool": "doc_new", "input": {"name": "spinning-bar"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "cylinder", "name": "base_disc", "transform": {"position": [0, 0.1, 0]}, "params": {"radius": 3.5, "height": 0.2}, "color": "#8a3ffc"},
+{"kind": "cylinder", "name": "post", "transform": {"position": [0, 0.7, 0]}, "params": {"radius": 0.3, "height": 1.0}, "color": "#ff2d95"},
+{"kind": "cylinder", "name": "moving", "transform": {"position": [0, 1.3, 0]}, "params": {"radius": 0.5, "height": 0.4}, "color": "#ff2d95"},
+{"kind": "box", "name": "bar", "parentRef": 2, "params": {"size": [6, 0.4, 0.5]}, "color": "#ffd400"},
+{"kind": "sphere", "name": "cap_l", "parentRef": 2, "transform": {"position": [-3, 0, 0]}, "params": {"radius": 0.4}, "color": "#00d1ff"},
+{"kind": "sphere", "name": "cap_r", "parentRef": 2, "transform": {"position": [3, 0, 0]}, "params": {"radius": 0.4}, "color": "#00d1ff"},
+{"kind": "anchor", "name": "pivot", "transform": {"position": [0, 1.3, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/spinning-bar.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/spinning-bar.raa.prims.json", "id": "rf.obstacle.spinning-bar", "budget": 1500}}
+]

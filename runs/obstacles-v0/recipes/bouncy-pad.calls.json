@@ -1,0 +1,11 @@
+[
+{"tool": "doc_new", "input": {"name": "bouncy-pad"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "cylinder", "name": "disc", "transform": {"position": [0, 0.15, 0]}, "params": {"radius": 1.0, "height": 0.3}, "color": "#7dff00"},
+{"kind": "torus", "name": "rim", "transform": {"position": [0, 0.3, 0]}, "params": {"majorRadius": 1.0, "minorRadius": 0.1}, "color": "#ff2d95"},
+{"kind": "cylinder", "name": "center", "transform": {"position": [0, 0.31, 0]}, "params": {"radius": 0.55, "height": 0.04}, "color": "#ffd400"},
+{"kind": "anchor", "name": "bounce", "transform": {"position": [0, 0.33, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/bouncy-pad.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/bouncy-pad.raa.prims.json", "id": "rf.obstacle.bouncy-pad", "budget": 1500}}
+]

@@ -1,0 +1,139 @@
+{
+  "format": "raa.manifest",
+  "version": 0,
+  "name": "rf.assets.obstacles-v0",
+  "entries": {
+    "rf.character.bean": {
+      "sha256": "dfebaea3a2ae5801ee4e943de3ce9517ccaddeccf4b91eb5d7ca7123d747d292",
+      "size": 4532,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.character.bean.source": {
+      "sha256": "5861b3c0671e1cb87c488c0ca213148cdea9df4e22bc63bb3c2745e7b661b05d",
+      "size": 2883,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.bouncy-pad": {
+      "sha256": "13e76487c234389ec9de04caced0685466c7f5142e5d960e5b709fa8402411e1",
+      "size": 3912,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.bouncy-pad.source": {
+      "sha256": "2e3073dc90f5c379897e16a3f9a5fdc5dde8b5ade59ae9843629d4e0a81e4782",
+      "size": 1172,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.conveyor-belt": {
+      "sha256": "846d7162a48ac5c2297d53a407758b64d3aec2a6379b338125bc15a717cb02e7",
+      "size": 5259,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.conveyor-belt.source": {
+      "sha256": "5aa07b6cf92c0b5e665c4c1d1345de39c65be57338938b76d116ce83a9a14092",
+      "size": 3151,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.gap-platform": {
+      "sha256": "429e5892e0b2549897dc5dd6c650b7dcaa65068608cc150d5e814b645efa457a",
+      "size": 5008,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.gap-platform.source": {
+      "sha256": "c55642671d62213c1836e289de21b1e7bd3792e8722845454b347d28f05605b0",
+      "size": 1818,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.pendulum-hammer": {
+      "sha256": "da1919e19472d3f85b3cecfe71a8da052ed08826d836983c0208ec9e61e2df36",
+      "size": 4929,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.pendulum-hammer.source": {
+      "sha256": "aa412ec823972de31ee07e05b5970267f17c42740a1267e233a0ea8242d2070f",
+      "size": 2630,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.rotating-door": {
+      "sha256": "e1434ed50843526994a7b2df8debb2ae1260a13497eece4fe48a46049d2b85e2",
+      "size": 4398,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.rotating-door.source": {
+      "sha256": "5ce2d70b018719443927e4b1a3f8ba08f52a7ee3bb76dd0678a5c65298db4366",
+      "size": 2232,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.see-saw": {
+      "sha256": "d75a27c1b10949f38ee06d63c76e9458dc080031fb523d6538fe7772003bf9b0",
+      "size": 2858,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.see-saw.source": {
+      "sha256": "c7339562cff63480c5c8fbbbbdfba5cc9bb6597c7f97ae7081ba4f99d3169a62",
+      "size": 1507,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.spinning-bar": {
+      "sha256": "391f050fb8a6793aebf3bbe627bb4e8196a4db5f8da7bf49818059f665b6de6a",
+      "size": 3962,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.spinning-bar.source": {
+      "sha256": "6c0fafc8029d1235a0ff89b77090ae420597fed76da93ba5be177789202d17a1",
+      "size": 1960,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.start-finish-arch": {
+      "sha256": "340def5a56f4e71b20947f0a787689ecbbe12bd10c003abff31fef2417bb99c2",
+      "size": 4318,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.start-finish-arch.source": {
+      "sha256": "db495e4fb41e43925682a6e5a09493774e84b20cb99582d02b523650e2b5aa46",
+      "size": 2205,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.swinging-gate": {
+      "sha256": "d02686c32f1de02040b57db7ba9670d93ee447345793d8db6f4a017f42298ae1",
+      "size": 4372,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.swinging-gate.source": {
+      "sha256": "862f6d2af74161eedf3a5b9b9dbf3c3fc11106db716cdf73eb8457711b055056",
+      "size": 2297,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    },
+    "rf.obstacle.wall-with-hole": {
+      "sha256": "f163d7d447690b3b3d19e9ce07dbfe5296c6ca35e334326758d9ba15114cdda3",
+      "size": 2446,
+      "contentType": "application/vnd.raa.prims+json",
+      "version": 1
+    },
+    "rf.obstacle.wall-with-hole.source": {
+      "sha256": "587487755c6b453912150868c1cdc8e41d1e3610ceb6cd19fd702739fbc4168d",
+      "size": 1485,
+      "contentType": "application/vnd.sdfm+json",
+      "version": 1
+    }
+  }
+}

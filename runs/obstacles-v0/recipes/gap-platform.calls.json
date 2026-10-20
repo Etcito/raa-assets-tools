@@ -1,0 +1,13 @@
+[
+{"tool": "doc_new", "input": {"name": "gap-platform"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "roundBox", "name": "platform_a", "transform": {"position": [-2.5, 0.3, 0]}, "params": {"size": [3, 0.6, 3], "radius": 0.1}, "color": "#00d1ff"},
+{"kind": "roundBox", "name": "platform_b", "transform": {"position": [2.5, 0.3, 0]}, "params": {"size": [3, 0.6, 3], "radius": 0.1}, "color": "#ff2d95"},
+{"kind": "box", "name": "edge_a", "transform": {"position": [-1.15, 0.31, 0]}, "params": {"size": [0.3, 0.6, 2.9]}, "color": "#ffd400"},
+{"kind": "box", "name": "edge_b", "transform": {"position": [1.15, 0.31, 0]}, "params": {"size": [0.3, 0.6, 2.9]}, "color": "#ffd400"},
+{"kind": "torus", "name": "target", "transform": {"position": [2.5, 0.6, 0]}, "params": {"majorRadius": 0.7, "minorRadius": 0.08}, "color": "#ffd400"},
+{"kind": "anchor", "name": "landing", "transform": {"position": [2.5, 0.6, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/gap-platform.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/gap-platform.raa.prims.json", "id": "rf.obstacle.gap-platform", "budget": 1500}}
+]

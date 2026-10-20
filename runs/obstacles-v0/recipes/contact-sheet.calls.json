@@ -1,0 +1,1660 @@
+[
+  {
+    "tool": "doc_new",
+    "input": {
+      "name": "obstacles-v0 contact sheet"
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_spinning_bar",
+          "transform": {
+            "position": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "kind": "cylinder",
+          "name": "base_disc",
+          "transform": {
+            "position": [
+              0,
+              0.1,
+              0
+            ]
+          },
+          "params": {
+            "radius": 3.5,
+            "height": 0.2
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "post",
+          "transform": {
+            "position": [
+              0,
+              0.7,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.3,
+            "height": 1
+          },
+          "color": "#ff2d95",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "moving",
+          "transform": {
+            "position": [
+              0,
+              1.3,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.5,
+            "height": 0.4
+          },
+          "color": "#ff2d95",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "bar",
+          "parentRef": 3,
+          "params": {
+            "size": [
+              6,
+              0.4,
+              0.5
+            ]
+          },
+          "color": "#ffd400"
+        },
+        {
+          "kind": "sphere",
+          "name": "cap_l",
+          "parentRef": 3,
+          "transform": {
+            "position": [
+              -3,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.4
+          },
+          "color": "#00d1ff"
+        },
+        {
+          "kind": "sphere",
+          "name": "cap_r",
+          "parentRef": 3,
+          "transform": {
+            "position": [
+              3,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.4
+          },
+          "color": "#00d1ff"
+        },
+        {
+          "kind": "anchor",
+          "name": "pivot",
+          "transform": {
+            "position": [
+              0,
+              1.3,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_pendulum_hammer",
+          "transform": {
+            "position": [
+              10,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "kind": "box",
+          "name": "foot_l",
+          "transform": {
+            "position": [
+              -1.8,
+              0.1,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.9,
+              0.2,
+              1.8
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "foot_r",
+          "transform": {
+            "position": [
+              1.8,
+              0.1,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.9,
+              0.2,
+              1.8
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "leg_l",
+          "transform": {
+            "position": [
+              -1.8,
+              2.45,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.4,
+              4.5,
+              0.6
+            ]
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "leg_r",
+          "transform": {
+            "position": [
+              1.8,
+              2.45,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.4,
+              4.5,
+              0.6
+            ]
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "beam",
+          "transform": {
+            "position": [
+              0,
+              4.7,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              90
+            ]
+          },
+          "params": {
+            "radius": 0.25,
+            "height": 4
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "moving",
+          "transform": {
+            "position": [
+              0,
+              4.7,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.4
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "arm",
+          "parentRef": 6,
+          "transform": {
+            "position": [
+              0,
+              -1.7,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.3,
+              3,
+              0.3
+            ]
+          },
+          "color": "#ffd400"
+        },
+        {
+          "kind": "cylinder",
+          "name": "head",
+          "parentRef": 6,
+          "transform": {
+            "position": [
+              0,
+              -3.4,
+              0
+            ],
+            "rotation": [
+              90,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.7,
+            "height": 1.6
+          },
+          "color": "#ff2d95"
+        },
+        {
+          "kind": "anchor",
+          "name": "pivot",
+          "transform": {
+            "position": [
+              0,
+              4.7,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_see_saw",
+          "transform": {
+            "position": [
+              20,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "kind": "cylinder",
+          "name": "pivot_drum",
+          "transform": {
+            "position": [
+              0,
+              0.45,
+              0
+            ],
+            "rotation": [
+              90,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.45,
+            "height": 1.6
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "moving",
+          "transform": {
+            "position": [
+              0,
+              1,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              6,
+              0.2,
+              1.8
+            ]
+          },
+          "color": "#ff2d95",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "stop_l",
+          "parentRef": 2,
+          "transform": {
+            "position": [
+              -2.8,
+              0.15,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.4,
+              0.2,
+              1.8
+            ]
+          },
+          "color": "#ffd400"
+        },
+        {
+          "kind": "box",
+          "name": "stop_r",
+          "parentRef": 2,
+          "transform": {
+            "position": [
+              2.8,
+              0.15,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.4,
+              0.2,
+              1.8
+            ]
+          },
+          "color": "#ffd400"
+        },
+        {
+          "kind": "anchor",
+          "name": "pivot",
+          "transform": {
+            "position": [
+              0,
+              1,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_rotating_door",
+          "transform": {
+            "position": [
+              30,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "kind": "box",
+          "name": "base",
+          "transform": {
+            "position": [
+              0,
+              0.05,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              3,
+              0.1,
+              0.6
+            ]
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "post_l",
+          "transform": {
+            "position": [
+              -1.4,
+              1.5,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.2,
+              2.8,
+              0.4
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "post_r",
+          "transform": {
+            "position": [
+              1.4,
+              1.5,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.2,
+              2.8,
+              0.4
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "lintel",
+          "transform": {
+            "position": [
+              0,
+              2.9,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              3,
+              0.2,
+              0.6
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "moving",
+          "transform": {
+            "position": [
+              0,
+              1.5,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.14,
+            "height": 2.8
+          },
+          "color": "#ff2d95",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "panel",
+          "parentRef": 5,
+          "params": {
+            "size": [
+              2.5,
+              2.6,
+              0.12
+            ]
+          },
+          "color": "#ffd400"
+        },
+        {
+          "kind": "box",
+          "name": "stripe",
+          "parentRef": 5,
+          "transform": {
+            "position": [
+              0,
+              0,
+              0.08
+            ]
+          },
+          "params": {
+            "size": [
+              2.5,
+              0.35,
+              0.06
+            ]
+          },
+          "color": "#ff2d95"
+        },
+        {
+          "kind": "anchor",
+          "name": "pivot",
+          "transform": {
+            "position": [
+              0,
+              1.5,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_bouncy_pad",
+          "transform": {
+            "position": [
+              0,
+              0,
+              10
+            ]
+          }
+        },
+        {
+          "kind": "cylinder",
+          "name": "disc",
+          "transform": {
+            "position": [
+              0,
+              0.15,
+              0
+            ]
+          },
+          "params": {
+            "radius": 1,
+            "height": 0.3
+          },
+          "color": "#7dff00",
+          "parentRef": 0
+        },
+        {
+          "kind": "torus",
+          "name": "rim",
+          "transform": {
+            "position": [
+              0,
+              0.3,
+              0
+            ]
+          },
+          "params": {
+            "majorRadius": 1,
+            "minorRadius": 0.1
+          },
+          "color": "#ff2d95",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "center",
+          "transform": {
+            "position": [
+              0,
+              0.31,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.55,
+            "height": 0.04
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "bounce",
+          "transform": {
+            "position": [
+              0,
+              0.33,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_conveyor_belt",
+          "transform": {
+            "position": [
+              10,
+              0,
+              10
+            ]
+          }
+        },
+        {
+          "kind": "roundBox",
+          "name": "deck",
+          "transform": {
+            "position": [
+              0,
+              0.3,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              7.4,
+              0.2,
+              1.8
+            ],
+            "radius": 0.08
+          },
+          "color": "#2b2b44",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "rail_l",
+          "transform": {
+            "position": [
+              0,
+              0.3,
+              -1.05
+            ]
+          },
+          "params": {
+            "size": [
+              7.4,
+              0.5,
+              0.3
+            ]
+          },
+          "color": "#ff7a00",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "rail_r",
+          "transform": {
+            "position": [
+              0,
+              0.3,
+              1.05
+            ]
+          },
+          "params": {
+            "size": [
+              7.4,
+              0.5,
+              0.3
+            ]
+          },
+          "color": "#ff7a00",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "roller_a",
+          "transform": {
+            "position": [
+              -3.7,
+              0.3,
+              0
+            ],
+            "rotation": [
+              90,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.3,
+            "height": 2.4
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "roller_b",
+          "transform": {
+            "position": [
+              3.7,
+              0.3,
+              0
+            ],
+            "rotation": [
+              90,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.3,
+            "height": 2.4
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "cone",
+          "name": "arrow_a",
+          "transform": {
+            "position": [
+              -1.5,
+              0.45,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              -90
+            ]
+          },
+          "params": {
+            "height": 0.7,
+            "radiusBottom": 0.35,
+            "radiusTop": 0
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "cone",
+          "name": "arrow_b",
+          "transform": {
+            "position": [
+              0,
+              0.45,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              -90
+            ]
+          },
+          "params": {
+            "height": 0.7,
+            "radiusBottom": 0.35,
+            "radiusTop": 0
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "cone",
+          "name": "arrow_c",
+          "transform": {
+            "position": [
+              1.5,
+              0.45,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              -90
+            ]
+          },
+          "params": {
+            "height": 0.7,
+            "radiusBottom": 0.35,
+            "radiusTop": 0
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "beltStart",
+          "transform": {
+            "position": [
+              -3.7,
+              0.45,
+              0
+            ]
+          },
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "beltEnd",
+          "transform": {
+            "position": [
+              3.7,
+              0.45,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_gap_platform",
+          "transform": {
+            "position": [
+              20,
+              0,
+              10
+            ]
+          }
+        },
+        {
+          "kind": "roundBox",
+          "name": "platform_a",
+          "transform": {
+            "position": [
+              -2.5,
+              0.3,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              3,
+              0.6,
+              3
+            ],
+            "radius": 0.1
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "roundBox",
+          "name": "platform_b",
+          "transform": {
+            "position": [
+              2.5,
+              0.3,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              3,
+              0.6,
+              3
+            ],
+            "radius": 0.1
+          },
+          "color": "#ff2d95",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "edge_a",
+          "transform": {
+            "position": [
+              -1.15,
+              0.31,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.3,
+              0.6,
+              2.9
+            ]
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "edge_b",
+          "transform": {
+            "position": [
+              1.15,
+              0.31,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.3,
+              0.6,
+              2.9
+            ]
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "torus",
+          "name": "target",
+          "transform": {
+            "position": [
+              2.5,
+              0.6,
+              0
+            ]
+          },
+          "params": {
+            "majorRadius": 0.7,
+            "minorRadius": 0.08
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "landing",
+          "transform": {
+            "position": [
+              2.5,
+              0.6,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_wall_with_hole",
+          "transform": {
+            "position": [
+              30,
+              0,
+              10
+            ]
+          }
+        },
+        {
+          "kind": "box",
+          "name": "wall",
+          "transform": {
+            "position": [
+              0,
+              1.5,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              4,
+              3,
+              0.5
+            ]
+          },
+          "color": "#ff7a00",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "hole",
+          "parentRef": 1,
+          "op": "subtract",
+          "transform": {
+            "position": [
+              0,
+              -0.5,
+              0
+            ],
+            "rotation": [
+              90,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.8,
+            "height": 0.8
+          },
+          "color": "#ff7a00"
+        },
+        {
+          "kind": "box",
+          "name": "cap",
+          "transform": {
+            "position": [
+              0,
+              2.9,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              4.1,
+              0.25,
+              0.56
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "foot",
+          "transform": {
+            "position": [
+              0,
+              0.1,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              4.1,
+              0.2,
+              0.56
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "passage",
+          "transform": {
+            "position": [
+              0,
+              1,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_swinging_gate",
+          "transform": {
+            "position": [
+              0,
+              0,
+              20
+            ]
+          }
+        },
+        {
+          "kind": "box",
+          "name": "post_l",
+          "transform": {
+            "position": [
+              -1.65,
+              1.15,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.3,
+              2.3,
+              0.3
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "post_r",
+          "transform": {
+            "position": [
+              1.65,
+              1.15,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              0.3,
+              2.3,
+              0.3
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "cap_l",
+          "transform": {
+            "position": [
+              -1.65,
+              2.3,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.2
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "cap_r",
+          "transform": {
+            "position": [
+              1.65,
+              2.3,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.2
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "cylinder",
+          "name": "moving",
+          "transform": {
+            "position": [
+              -1.4,
+              1.25,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.08,
+            "height": 2
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "panel",
+          "parentRef": 5,
+          "transform": {
+            "position": [
+              1.4,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              2.6,
+              1.7,
+              0.1
+            ]
+          },
+          "color": "#ff7a00"
+        },
+        {
+          "kind": "box",
+          "name": "stripe",
+          "parentRef": 5,
+          "transform": {
+            "position": [
+              1.4,
+              0,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              2.6,
+              0.3,
+              0.16
+            ]
+          },
+          "color": "#ffd400"
+        },
+        {
+          "kind": "anchor",
+          "name": "hinge",
+          "transform": {
+            "position": [
+              -1.4,
+              1.25,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_start_finish_arch",
+          "transform": {
+            "position": [
+              10,
+              0,
+              20
+            ]
+          }
+        },
+        {
+          "kind": "box",
+          "name": "pillar_l",
+          "transform": {
+            "position": [
+              -3.4,
+              2,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              1.2,
+              4,
+              1.5
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "pillar_r",
+          "transform": {
+            "position": [
+              3.4,
+              2,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              1.2,
+              4,
+              1.5
+            ]
+          },
+          "color": "#8a3ffc",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "lintel",
+          "transform": {
+            "position": [
+              0,
+              4.5,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              8,
+              1,
+              1.5
+            ]
+          },
+          "color": "#ff2d95",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "banner",
+          "transform": {
+            "position": [
+              0,
+              4.5,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              5,
+              0.6,
+              1.7
+            ]
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "ball_l",
+          "transform": {
+            "position": [
+              -3.4,
+              5.1,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.45
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "ball_r",
+          "transform": {
+            "position": [
+              3.4,
+              5.1,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.45
+          },
+          "color": "#00d1ff",
+          "parentRef": 0
+        },
+        {
+          "kind": "box",
+          "name": "line_stripe",
+          "transform": {
+            "position": [
+              0,
+              0.02,
+              0
+            ]
+          },
+          "params": {
+            "size": [
+              5.6,
+              0.04,
+              0.5
+            ]
+          },
+          "color": "#ffffff",
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "line",
+          "transform": {
+            "position": [
+              0,
+              0,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "node_add_batch",
+    "input": {
+      "items": [
+        {
+          "kind": "group",
+          "name": "sheet_bean",
+          "transform": {
+            "position": [
+              32.7,
+              0,
+              10
+            ]
+          }
+        },
+        {
+          "kind": "capsule",
+          "name": "body",
+          "transform": {
+            "position": [
+              0,
+              0.7,
+              0
+            ]
+          },
+          "params": {
+            "radius": 0.4,
+            "height": 1.4
+          },
+          "color": "#ff2d95",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "eye_l",
+          "transform": {
+            "position": [
+              0.14,
+              1.05,
+              0.33
+            ]
+          },
+          "params": {
+            "radius": 0.11
+          },
+          "color": "#ffffff",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "eye_r",
+          "transform": {
+            "position": [
+              -0.14,
+              1.05,
+              0.33
+            ]
+          },
+          "params": {
+            "radius": 0.11
+          },
+          "color": "#ffffff",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "pupil_l",
+          "transform": {
+            "position": [
+              0.14,
+              1.05,
+              0.41
+            ]
+          },
+          "params": {
+            "radius": 0.055
+          },
+          "color": "#1a1a2e",
+          "parentRef": 0
+        },
+        {
+          "kind": "sphere",
+          "name": "pupil_r",
+          "transform": {
+            "position": [
+              -0.14,
+              1.05,
+              0.41
+            ]
+          },
+          "params": {
+            "radius": 0.055
+          },
+          "color": "#1a1a2e",
+          "parentRef": 0
+        },
+        {
+          "kind": "capsule",
+          "name": "hand_l",
+          "transform": {
+            "position": [
+              0.38,
+              0.6,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              20
+            ]
+          },
+          "params": {
+            "radius": 0.09,
+            "height": 0.36
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "capsule",
+          "name": "hand_r",
+          "transform": {
+            "position": [
+              -0.38,
+              0.6,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              -20
+            ]
+          },
+          "params": {
+            "radius": 0.09,
+            "height": 0.36
+          },
+          "color": "#ffd400",
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "spawn",
+          "transform": {
+            "position": [
+              0,
+              0,
+              0
+            ]
+          },
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "head",
+          "transform": {
+            "position": [
+              0,
+              1.4,
+              0
+            ]
+          },
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "handL",
+          "transform": {
+            "position": [
+              0.42,
+              0.6,
+              0
+            ]
+          },
+          "parentRef": 0
+        },
+        {
+          "kind": "anchor",
+          "name": "handR",
+          "transform": {
+            "position": [
+              -0.42,
+              0.6,
+              0
+            ]
+          },
+          "parentRef": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "render_views",
+    "input": {
+      "views": [
+        "iso",
+        "front"
+      ],
+      "width": 768,
+      "height": 768,
+      "mode": "shaded",
+      "out": "out/obstacles-v0/contact-sheet.png"
+    }
+  }
+]

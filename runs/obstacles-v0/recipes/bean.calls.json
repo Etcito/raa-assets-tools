@@ -1,0 +1,18 @@
+[
+{"tool": "doc_new", "input": {"name": "bean"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "capsule", "name": "body", "transform": {"position": [0, 0.7, 0]}, "params": {"radius": 0.4, "height": 1.4}, "color": "#ff2d95"},
+{"kind": "sphere", "name": "eye_l", "transform": {"position": [0.14, 1.05, 0.33]}, "params": {"radius": 0.11}, "color": "#ffffff"},
+{"kind": "sphere", "name": "eye_r", "transform": {"position": [-0.14, 1.05, 0.33]}, "params": {"radius": 0.11}, "color": "#ffffff"},
+{"kind": "sphere", "name": "pupil_l", "transform": {"position": [0.14, 1.05, 0.41]}, "params": {"radius": 0.055}, "color": "#1a1a2e"},
+{"kind": "sphere", "name": "pupil_r", "transform": {"position": [-0.14, 1.05, 0.41]}, "params": {"radius": 0.055}, "color": "#1a1a2e"},
+{"kind": "capsule", "name": "hand_l", "transform": {"position": [0.38, 0.6, 0], "rotation": [0, 0, 20]}, "params": {"radius": 0.09, "height": 0.36}, "color": "#ffd400"},
+{"kind": "capsule", "name": "hand_r", "transform": {"position": [-0.38, 0.6, 0], "rotation": [0, 0, -20]}, "params": {"radius": 0.09, "height": 0.36}, "color": "#ffd400"},
+{"kind": "anchor", "name": "spawn", "transform": {"position": [0, 0, 0]}},
+{"kind": "anchor", "name": "head", "transform": {"position": [0, 1.4, 0]}},
+{"kind": "anchor", "name": "handL", "transform": {"position": [0.42, 0.6, 0]}},
+{"kind": "anchor", "name": "handR", "transform": {"position": [-0.42, 0.6, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/bean.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/bean.raa.prims.json", "id": "rf.character.bean", "budget": 1500, "segments": 12}}
+]

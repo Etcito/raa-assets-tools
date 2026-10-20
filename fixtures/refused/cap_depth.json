@@ -1,0 +1,167 @@
+{
+  "format": "raa.prims",
+  "version": 0,
+  "id": "refused-fixture",
+  "name": "Refused fixture",
+  "budget": {
+    "triangles": 1500,
+    "segments": 16
+  },
+  "nodes": [
+    {
+      "id": "root",
+      "kind": "box",
+      "params": {
+        "size": [1, 1, 1]
+      },
+      "transform": {
+        "t": [0, 0, 0],
+        "r": [0, 0, 0, 1],
+        "s": [1, 1, 1]
+      },
+      "material": "plain",
+      "op": "union",
+      "children": [
+        {
+          "id": "depth_2",
+          "kind": "box",
+          "params": {
+            "size": [1, 1, 1]
+          },
+          "transform": {
+            "t": [2, 0, 0],
+            "r": [0, 0, 0, 1],
+            "s": [1, 1, 1]
+          },
+          "material": "plain",
+          "op": "union",
+          "children": [
+            {
+              "id": "depth_3",
+              "kind": "box",
+              "params": {
+                "size": [1, 1, 1]
+              },
+              "transform": {
+                "t": [2, 0, 0],
+                "r": [0, 0, 0, 1],
+                "s": [1, 1, 1]
+              },
+              "material": "plain",
+              "op": "union",
+              "children": [
+                {
+                  "id": "depth_4",
+                  "kind": "box",
+                  "params": {
+                    "size": [1, 1, 1]
+                  },
+                  "transform": {
+                    "t": [2, 0, 0],
+                    "r": [0, 0, 0, 1],
+                    "s": [1, 1, 1]
+                  },
+                  "material": "plain",
+                  "op": "union",
+                  "children": [
+                    {
+                      "id": "depth_5",
+                      "kind": "box",
+                      "params": {
+                        "size": [1, 1, 1]
+                      },
+                      "transform": {
+                        "t": [2, 0, 0],
+                        "r": [0, 0, 0, 1],
+                        "s": [1, 1, 1]
+                      },
+                      "material": "plain",
+                      "op": "union",
+                      "children": [
+                        {
+                          "id": "depth_6",
+                          "kind": "box",
+                          "params": {
+                            "size": [1, 1, 1]
+                          },
+                          "transform": {
+                            "t": [2, 0, 0],
+                            "r": [0, 0, 0, 1],
+                            "s": [1, 1, 1]
+                          },
+                          "material": "plain",
+                          "op": "union",
+                          "children": [
+                            {
+                              "id": "depth_7",
+                              "kind": "box",
+                              "params": {
+                                "size": [1, 1, 1]
+                              },
+                              "transform": {
+                                "t": [2, 0, 0],
+                                "r": [0, 0, 0, 1],
+                                "s": [1, 1, 1]
+                              },
+                              "material": "plain",
+                              "op": "union",
+                              "children": [
+                                {
+                                  "id": "depth_8",
+                                  "kind": "box",
+                                  "params": {
+                                    "size": [1, 1, 1]
+                                  },
+                                  "transform": {
+                                    "t": [2, 0, 0],
+                                    "r": [0, 0, 0, 1],
+                                    "s": [1, 1, 1]
+                                  },
+                                  "material": "plain",
+                                  "op": "union",
+                                  "children": [
+                                    {
+                                      "id": "depth_9",
+                                      "kind": "box",
+                                      "params": {
+                                        "size": [1, 1, 1]
+                                      },
+                                      "transform": {
+                                        "t": [2, 0, 0],
+                                        "r": [0, 0, 0, 1],
+                                        "s": [1, 1, 1]
+                                      },
+                                      "material": "plain",
+                                      "op": "union"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "materials": {
+    "plain": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    }
+  },
+  "anchors": {},
+  "collision": {
+    "mode": "override",
+    "colliders": []
+  }
+}

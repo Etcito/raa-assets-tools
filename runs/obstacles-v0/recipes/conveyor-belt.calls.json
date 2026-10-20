@@ -1,0 +1,17 @@
+[
+{"tool": "doc_new", "input": {"name": "conveyor-belt"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "roundBox", "name": "deck", "transform": {"position": [0, 0.3, 0]}, "params": {"size": [7.4, 0.2, 1.8], "radius": 0.08}, "color": "#2b2b44"},
+{"kind": "box", "name": "rail_l", "transform": {"position": [0, 0.3, -1.05]}, "params": {"size": [7.4, 0.5, 0.3]}, "color": "#ff7a00"},
+{"kind": "box", "name": "rail_r", "transform": {"position": [0, 0.3, 1.05]}, "params": {"size": [7.4, 0.5, 0.3]}, "color": "#ff7a00"},
+{"kind": "cylinder", "name": "roller_a", "transform": {"position": [-3.7, 0.3, 0], "rotation": [90, 0, 0]}, "params": {"radius": 0.3, "height": 2.4}, "color": "#ffd400"},
+{"kind": "cylinder", "name": "roller_b", "transform": {"position": [3.7, 0.3, 0], "rotation": [90, 0, 0]}, "params": {"radius": 0.3, "height": 2.4}, "color": "#ffd400"},
+{"kind": "cone", "name": "arrow_a", "transform": {"position": [-1.5, 0.45, 0], "rotation": [0, 0, -90]}, "params": {"height": 0.7, "radiusBottom": 0.35, "radiusTop": 0.0}, "color": "#00d1ff"},
+{"kind": "cone", "name": "arrow_b", "transform": {"position": [0, 0.45, 0], "rotation": [0, 0, -90]}, "params": {"height": 0.7, "radiusBottom": 0.35, "radiusTop": 0.0}, "color": "#00d1ff"},
+{"kind": "cone", "name": "arrow_c", "transform": {"position": [1.5, 0.45, 0], "rotation": [0, 0, -90]}, "params": {"height": 0.7, "radiusBottom": 0.35, "radiusTop": 0.0}, "color": "#00d1ff"},
+{"kind": "anchor", "name": "beltStart", "transform": {"position": [-3.7, 0.45, 0]}},
+{"kind": "anchor", "name": "beltEnd", "transform": {"position": [3.7, 0.45, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/conveyor-belt.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/conveyor-belt.raa.prims.json", "id": "rf.obstacle.conveyor-belt", "budget": 1500}}
+]

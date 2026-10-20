@@ -1,0 +1,12 @@
+[
+{"tool": "doc_new", "input": {"name": "wall-with-hole"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "box", "name": "wall", "transform": {"position": [0, 1.5, 0]}, "params": {"size": [4, 3, 0.5]}, "color": "#ff7a00"},
+{"kind": "cylinder", "name": "hole", "parentRef": 0, "op": "subtract", "transform": {"position": [0, -0.5, 0], "rotation": [90, 0, 0]}, "params": {"radius": 0.8, "height": 0.8}, "color": "#ff7a00"},
+{"kind": "box", "name": "cap", "transform": {"position": [0, 2.9, 0]}, "params": {"size": [4.1, 0.25, 0.56]}, "color": "#8a3ffc"},
+{"kind": "box", "name": "foot", "transform": {"position": [0, 0.1, 0]}, "params": {"size": [4.1, 0.2, 0.56]}, "color": "#8a3ffc"},
+{"kind": "anchor", "name": "passage", "transform": {"position": [0, 1.0, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/wall-with-hole.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/wall-with-hole.raa.prims.json", "id": "rf.obstacle.wall-with-hole", "budget": 1500}}
+]

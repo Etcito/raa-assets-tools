@@ -1,0 +1,39 @@
+{
+  "format": "raa.prims",
+  "version": 0,
+  "id": "budget_exceeded",
+  "name": "budget exceeded",
+  "budget": {
+    "triangles": 200,
+    "segments": 16
+  },
+  "nodes": [
+    {
+      "id": "sphere",
+      "kind": "sphere",
+      "params": {
+        "radius": 1
+      },
+      "transform": {
+        "t": [0, 0, 0],
+        "r": [0, 0, 0, 1],
+        "s": [1, 1, 1]
+      },
+      "material": "plain",
+      "op": "union"
+    }
+  ],
+  "materials": {
+    "plain": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    }
+  },
+  "anchors": {},
+  "collision": {
+    "mode": "override",
+    "colliders": []
+  }
+}

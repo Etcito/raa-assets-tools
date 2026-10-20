@@ -1,0 +1,35 @@
+{
+  "store": {
+    "kind": "local",
+    "layout": "objects/<2hex>/<sha256>",
+    "isDefaultDir": false
+  },
+  "object": {
+    "sha256": "6e5bc93ca961adc277117b1829222acd16ff4eb8e7d570560671fa11b707b1e9",
+    "size": 51,
+    "created": true,
+    "key": "objects/6e/6e5bc93ca961adc277117b1829222acd16ff4eb8e7d570560671fa11b707b1e9"
+  },
+  "storedFile": {
+    "sha256": "6e5bc93ca961adc277117b1829222acd16ff4eb8e7d570560671fa11b707b1e9"
+  },
+  "get": {
+    "sha256": "6e5bc93ca961adc277117b1829222acd16ff4eb8e7d570560671fa11b707b1e9",
+    "size": 51,
+    "bytesEqual": true
+  },
+  "manifest": {
+    "sha256": "7ce63b52aa012ce3bf50f72ca5837ccbf5d0d6043a72e7511f49b9bb3d45cf1d",
+    "size": 285,
+    "key": "objects/7c/7ce63b52aa012ce3bf50f72ca5837ccbf5d0d6043a72e7511f49b9bb3d45cf1d",
+    "storedFile": {
+      "sha256": "7ce63b52aa012ce3bf50f72ca5837ccbf5d0d6043a72e7511f49b9bb3d45cf1d"
+    },
+    "entrySha256": "6e5bc93ca961adc277117b1829222acd16ff4eb8e7d570560671fa11b707b1e9"
+  },
+  "stat": {
+    "objects": 2,
+    "bytes": 336
+  },
+  "recordedAt": "2026-10-18T04:23:16.152Z"
+}

@@ -1,0 +1,57 @@
+{
+  "format": "raa.prims",
+  "version": 0,
+  "id": "bool_host_not_convex",
+  "name": "bool host not convex",
+  "budget": {
+    "triangles": 1500,
+    "segments": 16
+  },
+  "nodes": [
+    {
+      "id": "ring",
+      "kind": "torus",
+      "params": {
+        "majorRadius": 2,
+        "minorRadius": 0.5
+      },
+      "transform": {
+        "t": [0, 0, 0],
+        "r": [0, 0, 0, 1],
+        "s": [1, 1, 1]
+      },
+      "material": "plain",
+      "op": "union",
+      "children": [
+        {
+          "id": "hole",
+          "kind": "cylinder",
+          "params": {
+            "height": 2,
+            "radius": 0.5
+          },
+          "transform": {
+            "t": [0, 0, 0],
+            "r": [0, 0, 0, 1],
+            "s": [1, 1, 1]
+          },
+          "material": "plain",
+          "op": "subtract"
+        }
+      ]
+    }
+  ],
+  "materials": {
+    "plain": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    }
+  },
+  "anchors": {},
+  "collision": {
+    "mode": "override",
+    "colliders": []
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "run": "obstacles-v0",
+  "toolsCommit": "e5a624497ef8f59ff8ee276c32740a353275f1f2",
+  "sdfmCommit": "a6caa04d4909ac9aa8395d273da9a0c4ff1b3b26",
+  "store": {
+    "kind": "local",
+    "layout": "objects/<2hex>/<sha256>"
+  },
+  "assets": [
+    {
+      "name": "spinning-bar",
+      "id": "rf.obstacle.spinning-bar",
+      "logical": "rf.obstacle.spinning-bar",
+      "anchors": [
+        "pivot"
+      ],
+      "moving": true,
+      "triangles": 640,
+      "budget": 1500,
+      "nodes": 6,
+      "sha256": "391f050fb8a6793aebf3bbe627bb4e8196a4db5f8da7bf49818059f665b6de6a",
+      "size": 3962,
+      "key": "objects/39/391f050fb8a6793aebf3bbe627bb4e8196a4db5f8da7bf49818059f665b6de6a",
+      "source": {
+        "sha256": "6c0fafc8029d1235a0ff89b77090ae420597fed76da93ba5be177789202d17a1",
+        "size": 1960,
+        "key": "objects/6c/6c0fafc8029d1235a0ff89b77090ae420597fed76da93ba5be177789202d17a1"
+      }
+    },
+    {
+      "name": "pendulum-hammer",
+      "id": "rf.obstacle.pendulum-hammer",
+      "logical": "rf.obstacle.pendulum-hammer",
+      "anchors": [
+        "pivot"
+      ],
+      "moving": true,
+      "triangles": 404,
+      "budget": 1500,
+      "nodes": 8,
+      "sha256": "da1919e19472d3f85b3cecfe71a8da052ed08826d836983c0208ec9e61e2df36",
+      "size": 4929,
+      "key": "objects/da/da1919e19472d3f85b3cecfe71a8da052ed08826d836983c0208ec9e61e2df36",
+      "source": {
+        "sha256": "aa412ec823972de31ee07e05b5970267f17c42740a1267e233a0ea8242d2070f",
+        "size": 2630,
+        "key": "objects/aa/aa412ec823972de31ee07e05b5970267f17c42740a1267e233a0ea8242d2070f"
+      }
+    },
+    {
+      "name": "see-saw",
+      "id": "rf.obstacle.see-saw",
+      "logical": "rf.obstacle.see-saw",
+      "anchors": [
+        "pivot"
+      ],
+      "moving": true,
+      "triangles": 96,
+      "budget": 1500,
+      "nodes": 4,
+      "sha256": "d75a27c1b10949f38ee06d63c76e9458dc080031fb523d6538fe7772003bf9b0",
+      "size": 2858,
+      "key": "objects/d7/d75a27c1b10949f38ee06d63c76e9458dc080031fb523d6538fe7772003bf9b0",
+      "source": {
+        "sha256": "c7339562cff63480c5c8fbbbbdfba5cc9bb6597c7f97ae7081ba4f99d3169a62",
+        "size": 1507,
+        "key": "objects/c7/c7339562cff63480c5c8fbbbbdfba5cc9bb6597c7f97ae7081ba4f99d3169a62"
+      }
+    },
+    {
+      "name": "rotating-door",
+      "id": "rf.obstacle.rotating-door",
+      "logical": "rf.obstacle.rotating-door",
+      "anchors": [
+        "pivot"
+      ],
+      "moving": true,
+      "triangles": 132,
+      "budget": 1500,
+      "nodes": 7,
+      "sha256": "e1434ed50843526994a7b2df8debb2ae1260a13497eece4fe48a46049d2b85e2",
+      "size": 4398,
+      "key": "objects/e1/e1434ed50843526994a7b2df8debb2ae1260a13497eece4fe48a46049d2b85e2",
+      "source": {
+        "sha256": "5ce2d70b018719443927e4b1a3f8ba08f52a7ee3bb76dd0678a5c65298db4366",
+        "size": 2232,
+        "key": "objects/5c/5ce2d70b018719443927e4b1a3f8ba08f52a7ee3bb76dd0678a5c65298db4366"
+      }
+    },
+    {
+      "name": "swinging-gate",
+      "id": "rf.obstacle.swinging-gate",
+      "logical": "rf.obstacle.swinging-gate",
+      "anchors": [
+        "hinge"
+      ],
+      "moving": true,
+      "triangles": 556,
+      "budget": 1500,
+      "nodes": 7,
+      "sha256": "d02686c32f1de02040b57db7ba9670d93ee447345793d8db6f4a017f42298ae1",
+      "size": 4372,
+      "key": "objects/d0/d02686c32f1de02040b57db7ba9670d93ee447345793d8db6f4a017f42298ae1",
+      "source": {
+        "sha256": "862f6d2af74161eedf3a5b9b9dbf3c3fc11106db716cdf73eb8457711b055056",
+        "size": 2297,
+        "key": "objects/86/862f6d2af74161eedf3a5b9b9dbf3c3fc11106db716cdf73eb8457711b055056"
+      }
+    },
+    {
+      "name": "bouncy-pad",
+      "id": "rf.obstacle.bouncy-pad",
+      "logical": "rf.obstacle.bouncy-pad",
+      "anchors": [
+        "bounce"
+      ],
+      "moving": false,
+      "triangles": 376,
+      "budget": 1500,
+      "nodes": 3,
+      "sha256": "13e76487c234389ec9de04caced0685466c7f5142e5d960e5b709fa8402411e1",
+      "size": 3912,
+      "key": "objects/13/13e76487c234389ec9de04caced0685466c7f5142e5d960e5b709fa8402411e1",
+      "source": {
+        "sha256": "2e3073dc90f5c379897e16a3f9a5fdc5dde8b5ade59ae9843629d4e0a81e4782",
+        "size": 1172,
+        "key": "objects/2e/2e3073dc90f5c379897e16a3f9a5fdc5dde8b5ade59ae9843629d4e0a81e4782"
+      }
+    },
+    {
+      "name": "conveyor-belt",
+      "id": "rf.obstacle.conveyor-belt",
+      "logical": "rf.obstacle.conveyor-belt",
+      "anchors": [
+        "beltEnd",
+        "beltStart"
+      ],
+      "moving": false,
+      "triangles": 566,
+      "budget": 1500,
+      "nodes": 8,
+      "sha256": "846d7162a48ac5c2297d53a407758b64d3aec2a6379b338125bc15a717cb02e7",
+      "size": 5259,
+      "key": "objects/84/846d7162a48ac5c2297d53a407758b64d3aec2a6379b338125bc15a717cb02e7",
+      "source": {
+        "sha256": "5aa07b6cf92c0b5e665c4c1d1345de39c65be57338938b76d116ce83a9a14092",
+        "size": 3151,
+        "key": "objects/5a/5aa07b6cf92c0b5e665c4c1d1345de39c65be57338938b76d116ce83a9a14092"
+      }
+    },
+    {
+      "name": "gap-platform",
+      "id": "rf.obstacle.gap-platform",
+      "logical": "rf.obstacle.gap-platform",
+      "anchors": [
+        "landing"
+      ],
+      "moving": false,
+      "triangles": 944,
+      "budget": 1500,
+      "nodes": 5,
+      "sha256": "429e5892e0b2549897dc5dd6c650b7dcaa65068608cc150d5e814b645efa457a",
+      "size": 5008,
+      "key": "objects/42/429e5892e0b2549897dc5dd6c650b7dcaa65068608cc150d5e814b645efa457a",
+      "source": {
+        "sha256": "c55642671d62213c1836e289de21b1e7bd3792e8722845454b347d28f05605b0",
+        "size": 1818,
+        "key": "objects/c5/c55642671d62213c1836e289de21b1e7bd3792e8722845454b347d28f05605b0"
+      }
+    },
+    {
+      "name": "wall-with-hole",
+      "id": "rf.obstacle.wall-with-hole",
+      "logical": "rf.obstacle.wall-with-hole",
+      "anchors": [
+        "passage"
+      ],
+      "moving": false,
+      "triangles": 156,
+      "budget": 1500,
+      "nodes": 4,
+      "sha256": "f163d7d447690b3b3d19e9ce07dbfe5296c6ca35e334326758d9ba15114cdda3",
+      "size": 2446,
+      "key": "objects/f1/f163d7d447690b3b3d19e9ce07dbfe5296c6ca35e334326758d9ba15114cdda3",
+      "source": {
+        "sha256": "587487755c6b453912150868c1cdc8e41d1e3610ceb6cd19fd702739fbc4168d",
+        "size": 1485,
+        "key": "objects/58/587487755c6b453912150868c1cdc8e41d1e3610ceb6cd19fd702739fbc4168d"
+      }
+    },
+    {
+      "name": "start-finish-arch",
+      "id": "rf.obstacle.start-finish-arch",
+      "logical": "rf.obstacle.start-finish-arch",
+      "anchors": [
+        "line"
+      ],
+      "moving": false,
+      "triangles": 508,
+      "budget": 1500,
+      "nodes": 7,
+      "sha256": "340def5a56f4e71b20947f0a787689ecbbe12bd10c003abff31fef2417bb99c2",
+      "size": 4318,
+      "key": "objects/34/340def5a56f4e71b20947f0a787689ecbbe12bd10c003abff31fef2417bb99c2",
+      "source": {
+        "sha256": "db495e4fb41e43925682a6e5a09493774e84b20cb99582d02b523650e2b5aa46",
+        "size": 2205,
+        "key": "objects/db/db495e4fb41e43925682a6e5a09493774e84b20cb99582d02b523650e2b5aa46"
+      }
+    },
+    {
+      "name": "bean",
+      "id": "rf.character.bean",
+      "logical": "rf.character.bean",
+      "anchors": [
+        "handL",
+        "handR",
+        "head",
+        "spawn"
+      ],
+      "moving": false,
+      "triangles": 912,
+      "budget": 1500,
+      "nodes": 7,
+      "sha256": "dfebaea3a2ae5801ee4e943de3ce9517ccaddeccf4b91eb5d7ca7123d747d292",
+      "size": 4532,
+      "key": "objects/df/dfebaea3a2ae5801ee4e943de3ce9517ccaddeccf4b91eb5d7ca7123d747d292",
+      "source": {
+        "sha256": "5861b3c0671e1cb87c488c0ca213148cdea9df4e22bc63bb3c2745e7b661b05d",
+        "size": 2883,
+        "key": "objects/58/5861b3c0671e1cb87c488c0ca213148cdea9df4e22bc63bb3c2745e7b661b05d"
+      }
+    }
+  ],
+  "manifest": {
+    "name": "rf.assets.obstacles-v0",
+    "sha256": "e9f5556a27e86135ec388c73ea16487cc26ad2db7b8683bcc4531d76be402317",
+    "size": 4940,
+    "key": "objects/e9/e9f5556a27e86135ec388c73ea16487cc26ad2db7b8683bcc4531d76be402317",
+    "storedFile": {
+      "sha256": "e9f5556a27e86135ec388c73ea16487cc26ad2db7b8683bcc4531d76be402317"
+    },
+    "get": {
+      "sha256": "e9f5556a27e86135ec388c73ea16487cc26ad2db7b8683bcc4531d76be402317",
+      "size": 4940
+    }
+  },
+  "contactSheet": {
+    "sha256": "e152f8e8d1093190c4632bd20c0febd2dcd3db49a8edb820f357a4ed4398ad4f",
+    "size": 52210,
+    "key": "objects/e1/e152f8e8d1093190c4632bd20c0febd2dcd3db49a8edb820f357a4ed4398ad4f",
+    "renderer": "host-webgpu",
+    "url": null,
+    "width": 1536,
+    "height": 792
+  }
+}

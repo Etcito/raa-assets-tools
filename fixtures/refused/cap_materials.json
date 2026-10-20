@@ -1,0 +1,231 @@
+{
+  "format": "raa.prims",
+  "version": 0,
+  "id": "refused-fixture",
+  "name": "Refused fixture",
+  "budget": {
+    "triangles": 1500,
+    "segments": 16
+  },
+  "nodes": [
+    {
+      "id": "root",
+      "kind": "box",
+      "params": {
+        "size": [1, 1, 1]
+      },
+      "transform": {
+        "t": [0, 0, 0],
+        "r": [0, 0, 0, 1],
+        "s": [1, 1, 1]
+      },
+      "material": "plain",
+      "op": "union"
+    }
+  ],
+  "materials": {
+    "plain": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_01": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_02": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_03": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_04": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_05": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_06": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_07": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_08": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_09": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_10": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_11": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_12": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_13": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_14": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_15": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_16": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_17": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_18": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_19": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_20": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_21": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_22": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_23": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_24": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_25": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_26": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_27": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_28": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_29": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_30": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_31": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    },
+    "extra_32": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    }
+  },
+  "anchors": {},
+  "collision": {
+    "mode": "override",
+    "colliders": []
+  }
+}

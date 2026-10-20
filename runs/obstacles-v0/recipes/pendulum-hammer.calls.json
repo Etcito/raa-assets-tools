@@ -1,0 +1,16 @@
+[
+{"tool": "doc_new", "input": {"name": "pendulum-hammer"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "box", "name": "foot_l", "transform": {"position": [-1.8, 0.1, 0]}, "params": {"size": [0.9, 0.2, 1.8]}, "color": "#8a3ffc"},
+{"kind": "box", "name": "foot_r", "transform": {"position": [1.8, 0.1, 0]}, "params": {"size": [0.9, 0.2, 1.8]}, "color": "#8a3ffc"},
+{"kind": "box", "name": "leg_l", "transform": {"position": [-1.8, 2.45, 0]}, "params": {"size": [0.4, 4.5, 0.6]}, "color": "#00d1ff"},
+{"kind": "box", "name": "leg_r", "transform": {"position": [1.8, 2.45, 0]}, "params": {"size": [0.4, 4.5, 0.6]}, "color": "#00d1ff"},
+{"kind": "cylinder", "name": "beam", "transform": {"position": [0, 4.7, 0], "rotation": [0, 0, 90]}, "params": {"radius": 0.25, "height": 4.0}, "color": "#00d1ff"},
+{"kind": "sphere", "name": "moving", "transform": {"position": [0, 4.7, 0]}, "params": {"radius": 0.4}, "color": "#ffd400"},
+{"kind": "box", "name": "arm", "parentRef": 5, "transform": {"position": [0, -1.7, 0]}, "params": {"size": [0.3, 3.0, 0.3]}, "color": "#ffd400"},
+{"kind": "cylinder", "name": "head", "parentRef": 5, "transform": {"position": [0, -3.4, 0], "rotation": [90, 0, 0]}, "params": {"radius": 0.7, "height": 1.6}, "color": "#ff2d95"},
+{"kind": "anchor", "name": "pivot", "transform": {"position": [0, 4.7, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/pendulum-hammer.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/pendulum-hammer.raa.prims.json", "id": "rf.obstacle.pendulum-hammer", "budget": 1500}}
+]

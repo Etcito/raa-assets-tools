@@ -1,0 +1,292 @@
+{
+  "refused": {
+    "bad_anchor.json": {
+      "codes": [
+        "BAD_ANCHOR"
+      ],
+      "nodes": []
+    },
+    "bad_budget.json": {
+      "codes": [
+        "BAD_BUDGET"
+      ],
+      "nodes": []
+    },
+    "bad_collider.json": {
+      "codes": [
+        "BAD_COLLIDER"
+      ],
+      "nodes": []
+    },
+    "bad_format.json": {
+      "codes": [
+        "BAD_FORMAT"
+      ],
+      "nodes": []
+    },
+    "bad_id.json": {
+      "codes": [
+        "BAD_ID"
+      ],
+      "nodes": [
+        "Wooden-Crate"
+      ]
+    },
+    "bad_material.json": {
+      "codes": [
+        "BAD_MATERIAL"
+      ],
+      "nodes": []
+    },
+    "bad_name.json": {
+      "codes": [
+        "BAD_NAME"
+      ],
+      "nodes": []
+    },
+    "bad_params.json": {
+      "codes": [
+        "BAD_PARAMS"
+      ],
+      "nodes": [
+        "plank"
+      ]
+    },
+    "bad_transform.json": {
+      "codes": [
+        "BAD_TRANSFORM"
+      ],
+      "nodes": [
+        "root"
+      ]
+    },
+    "bad_type.json": {
+      "codes": [
+        "BAD_TYPE"
+      ],
+      "nodes": []
+    },
+    "bad_version.json": {
+      "codes": [
+        "BAD_VERSION"
+      ],
+      "nodes": []
+    },
+    "bool_cutter_not_convex.json": {
+      "codes": [
+        "BOOL_CUTTER_NOT_CONVEX"
+      ],
+      "nodes": [
+        "ring"
+      ]
+    },
+    "bool_cutters_overlap.json": {
+      "codes": [
+        "BOOL_CUTTERS_OVERLAP"
+      ],
+      "nodes": [
+        "hole_a",
+        "hole_b"
+      ]
+    },
+    "bool_host_not_convex.json": {
+      "codes": [
+        "BOOL_HOST_NOT_CONVEX"
+      ],
+      "nodes": [
+        "hole",
+        "ring"
+      ]
+    },
+    "bool_intersect_mixed.json": {
+      "codes": [
+        "BOOL_INTERSECT_MIXED"
+      ],
+      "nodes": [
+        "hole",
+        "host",
+        "keep"
+      ]
+    },
+    "bool_nested.json": {
+      "codes": [
+        "BOOL_NESTED"
+      ],
+      "nodes": [
+        "detail",
+        "hole"
+      ]
+    },
+    "bool_no_host.json": {
+      "codes": [
+        "BOOL_NO_HOST"
+      ],
+      "nodes": [
+        "hole"
+      ]
+    },
+    "budget_exceeded.json": {
+      "codes": [
+        "BUDGET_EXCEEDED"
+      ],
+      "nodes": [
+        "sphere"
+      ]
+    },
+    "cap_anchors.json": {
+      "codes": [
+        "CAP_ANCHORS"
+      ],
+      "nodes": []
+    },
+    "cap_colliders.json": {
+      "codes": [
+        "CAP_COLLIDERS"
+      ],
+      "nodes": []
+    },
+    "cap_depth.json": {
+      "codes": [
+        "CAP_DEPTH"
+      ],
+      "nodes": [
+        "depth_9"
+      ]
+    },
+    "cap_materials.json": {
+      "codes": [
+        "CAP_MATERIALS"
+      ],
+      "nodes": []
+    },
+    "cap_nodes.json": {
+      "codes": [
+        "CAP_NODES"
+      ],
+      "nodes": []
+    },
+    "collision_stale.json": {
+      "codes": [
+        "COLLISION_STALE"
+      ],
+      "nodes": [
+        "sphere"
+      ]
+    },
+    "duplicate_id.json": {
+      "codes": [
+        "DUPLICATE_ID"
+      ],
+      "nodes": [
+        "crate"
+      ]
+    },
+    "json_parse.json": {
+      "codes": [
+        "JSON_PARSE"
+      ],
+      "nodes": []
+    },
+    "missing_field.json": {
+      "codes": [
+        "MISSING_FIELD"
+      ],
+      "nodes": []
+    },
+    "not_object.json": {
+      "codes": [
+        "NOT_OBJECT"
+      ],
+      "nodes": []
+    },
+    "number_not_finite.json": {
+      "codes": [
+        "NUMBER_NOT_FINITE"
+      ],
+      "nodes": [
+        "root"
+      ]
+    },
+    "number_range.json": {
+      "codes": [
+        "NUMBER_RANGE"
+      ],
+      "nodes": [
+        "root"
+      ]
+    },
+    "param_range.json": {
+      "codes": [
+        "PARAM_RANGE"
+      ],
+      "nodes": [
+        "root"
+      ]
+    },
+    "scale_nonuniform_parent.json": {
+      "codes": [
+        "SCALE_NONUNIFORM_PARENT"
+      ],
+      "nodes": [
+        "root"
+      ]
+    },
+    "unknown_field.json": {
+      "codes": [
+        "UNKNOWN_FIELD"
+      ],
+      "nodes": []
+    },
+    "unknown_kind.json": {
+      "codes": [
+        "UNKNOWN_KIND"
+      ],
+      "nodes": [
+        "roof"
+      ]
+    },
+    "unknown_material.json": {
+      "codes": [
+        "UNKNOWN_MATERIAL"
+      ],
+      "nodes": [
+        "root"
+      ]
+    }
+  },
+  "valid": {
+    "capsule-cylinder.raa.prims.json": {
+      "triangles": 316
+    },
+    "cones.raa.prims.json": {
+      "triangles": 120
+    },
+    "ellipsoid-roundbox.raa.prims.json": {
+      "triangles": 556
+    },
+    "intersect-dome.raa.prims.json": {
+      "triangles": 248
+    },
+    "nested-union.raa.prims.json": {
+      "triangles": 716
+    },
+    "override-colliders.raa.prims.json": {
+      "triangles": 296
+    },
+    "segments-32.raa.prims.json": {
+      "triangles": 1084
+    },
+    "sphere-spawn.raa.prims.json": {
+      "triangles": 224
+    },
+    "torus-ring.raa.prims.json": {
+      "triangles": 256
+    },
+    "two-cutters.raa.prims.json": {
+      "triangles": 580
+    },
+    "wall-with-hole.raa.prims.json": {
+      "triangles": 132
+    }
+  }
+}

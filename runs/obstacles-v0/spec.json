@@ -1,0 +1,125 @@
+{
+  "assets": [
+    {
+      "name": "spinning-bar",
+      "logical": "rf.obstacle.spinning-bar",
+      "id": "rf.obstacle.spinning-bar",
+      "file": "spinning-bar.raa.prims.json",
+      "footprint": [7, 1.6, 7],
+      "anchors": ["pivot"],
+      "budget": 1500,
+      "moving": true,
+      "notes": "base post + 6 m bar (moving); moving part = root primitive with id moving at the pivot/hinge anchor"
+    },
+    {
+      "name": "pendulum-hammer",
+      "logical": "rf.obstacle.pendulum-hammer",
+      "id": "rf.obstacle.pendulum-hammer",
+      "file": "pendulum-hammer.raa.prims.json",
+      "footprint": [4, 5, 2],
+      "anchors": ["pivot"],
+      "budget": 1500,
+      "moving": true,
+      "notes": "frame beam + arm + cylinder head (moving); moving part = root primitive with id moving at the pivot/hinge anchor"
+    },
+    {
+      "name": "see-saw",
+      "logical": "rf.obstacle.see-saw",
+      "id": "rf.obstacle.see-saw",
+      "file": "see-saw.raa.prims.json",
+      "footprint": [6, 1.2, 2],
+      "anchors": ["pivot"],
+      "budget": 1500,
+      "moving": true,
+      "notes": "plank (moving) on a wedge or cylinder pivot; moving part = root primitive with id moving at the pivot/hinge anchor"
+    },
+    {
+      "name": "rotating-door",
+      "logical": "rf.obstacle.rotating-door",
+      "id": "rf.obstacle.rotating-door",
+      "file": "rotating-door.raa.prims.json",
+      "footprint": [3, 3, 0.6],
+      "anchors": ["pivot"],
+      "budget": 1500,
+      "moving": true,
+      "notes": "frame + door panel (moving); moving part = root primitive with id moving at the pivot/hinge anchor"
+    },
+    {
+      "name": "bouncy-pad",
+      "logical": "rf.obstacle.bouncy-pad",
+      "id": "rf.obstacle.bouncy-pad",
+      "file": "bouncy-pad.raa.prims.json",
+      "footprint": [2.2, 0.4, 2.2],
+      "anchors": ["bounce"],
+      "budget": 1500,
+      "moving": false,
+      "notes": "disc + torus rim"
+    },
+    {
+      "name": "conveyor-belt",
+      "logical": "rf.obstacle.conveyor-belt",
+      "id": "rf.obstacle.conveyor-belt",
+      "file": "conveyor-belt.raa.prims.json",
+      "footprint": [8, 0.6, 2.4],
+      "anchors": ["beltStart", "beltEnd"],
+      "budget": 1500,
+      "moving": false,
+      "notes": "rounded deck + rollers"
+    },
+    {
+      "name": "gap-platform",
+      "logical": "rf.obstacle.gap-platform",
+      "id": "rf.obstacle.gap-platform",
+      "file": "gap-platform.raa.prims.json",
+      "footprint": [8, 0.6, 3],
+      "anchors": ["landing"],
+      "budget": 1500,
+      "moving": false,
+      "notes": "two platforms with a 2 m gap"
+    },
+    {
+      "name": "wall-with-hole",
+      "logical": "rf.obstacle.wall-with-hole",
+      "id": "rf.obstacle.wall-with-hole",
+      "file": "wall-with-hole.raa.prims.json",
+      "footprint": [4, 3, 0.5],
+      "anchors": ["passage"],
+      "budget": 1500,
+      "moving": false,
+      "notes": "box minus a cylinder (subtract)"
+    },
+    {
+      "name": "swinging-gate",
+      "logical": "rf.obstacle.swinging-gate",
+      "id": "rf.obstacle.swinging-gate",
+      "file": "swinging-gate.raa.prims.json",
+      "footprint": [3.5, 2.5, 0.4],
+      "anchors": ["hinge"],
+      "budget": 1500,
+      "moving": true,
+      "notes": "posts + gate panel (moving); moving part = root primitive with id moving at the pivot/hinge anchor"
+    },
+    {
+      "name": "start-finish-arch",
+      "logical": "rf.obstacle.start-finish-arch",
+      "id": "rf.obstacle.start-finish-arch",
+      "file": "start-finish-arch.raa.prims.json",
+      "footprint": [8, 5, 1.5],
+      "anchors": ["line"],
+      "budget": 1500,
+      "moving": false,
+      "notes": "pillars + torus or box arch"
+    },
+    {
+      "name": "bean",
+      "logical": "rf.character.bean",
+      "id": "rf.character.bean",
+      "file": "bean.raa.prims.json",
+      "footprint": [0.8, 1.4, 0.8],
+      "anchors": ["spawn", "head", "handL", "handR"],
+      "budget": 1500,
+      "moving": false,
+      "notes": "capsule body, sphere eyes, cheerful colour"
+    }
+  ]
+}

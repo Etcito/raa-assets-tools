@@ -1,0 +1,15 @@
+[
+{"tool": "doc_new", "input": {"name": "swinging-gate"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "box", "name": "post_l", "transform": {"position": [-1.65, 1.15, 0]}, "params": {"size": [0.3, 2.3, 0.3]}, "color": "#8a3ffc"},
+{"kind": "box", "name": "post_r", "transform": {"position": [1.65, 1.15, 0]}, "params": {"size": [0.3, 2.3, 0.3]}, "color": "#8a3ffc"},
+{"kind": "sphere", "name": "cap_l", "transform": {"position": [-1.65, 2.3, 0]}, "params": {"radius": 0.2}, "color": "#ffd400"},
+{"kind": "sphere", "name": "cap_r", "transform": {"position": [1.65, 2.3, 0]}, "params": {"radius": 0.2}, "color": "#ffd400"},
+{"kind": "cylinder", "name": "moving", "transform": {"position": [-1.4, 1.25, 0]}, "params": {"radius": 0.08, "height": 2.0}, "color": "#00d1ff"},
+{"kind": "box", "name": "panel", "parentRef": 4, "transform": {"position": [1.4, 0, 0]}, "params": {"size": [2.6, 1.7, 0.1]}, "color": "#ff7a00"},
+{"kind": "box", "name": "stripe", "parentRef": 4, "transform": {"position": [1.4, 0, 0]}, "params": {"size": [2.6, 0.3, 0.16]}, "color": "#ffd400"},
+{"kind": "anchor", "name": "hinge", "transform": {"position": [-1.4, 1.25, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/swinging-gate.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/swinging-gate.raa.prims.json", "id": "rf.obstacle.swinging-gate", "budget": 1500}}
+]

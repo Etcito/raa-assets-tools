@@ -1,0 +1,69 @@
+{
+  "format": "raa.prims",
+  "version": 0,
+  "id": "bool_cutters_overlap",
+  "name": "bool cutters overlap",
+  "budget": {
+    "triangles": 1500,
+    "segments": 16
+  },
+  "nodes": [
+    {
+      "id": "host",
+      "kind": "box",
+      "params": {
+        "size": [6, 4, 2]
+      },
+      "transform": {
+        "t": [0, 0, 0],
+        "r": [0, 0, 0, 1],
+        "s": [1, 1, 1]
+      },
+      "material": "plain",
+      "op": "union",
+      "children": [
+        {
+          "id": "hole_a",
+          "kind": "sphere",
+          "params": {
+            "radius": 0.5
+          },
+          "transform": {
+            "t": [-0.25, 0, 0],
+            "r": [0, 0, 0, 1],
+            "s": [1, 1, 1]
+          },
+          "material": "plain",
+          "op": "subtract"
+        },
+        {
+          "id": "hole_b",
+          "kind": "sphere",
+          "params": {
+            "radius": 0.5
+          },
+          "transform": {
+            "t": [0.25, 0, 0],
+            "r": [0, 0, 0, 1],
+            "s": [1, 1, 1]
+          },
+          "material": "plain",
+          "op": "subtract"
+        }
+      ]
+    }
+  ],
+  "materials": {
+    "plain": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    }
+  },
+  "anchors": {},
+  "collision": {
+    "mode": "override",
+    "colliders": []
+  }
+}

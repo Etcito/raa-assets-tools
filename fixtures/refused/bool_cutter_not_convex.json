@@ -1,0 +1,56 @@
+{
+  "format": "raa.prims",
+  "version": 0,
+  "id": "bool_cutter_not_convex",
+  "name": "bool cutter not convex",
+  "budget": {
+    "triangles": 1500,
+    "segments": 16
+  },
+  "nodes": [
+    {
+      "id": "host",
+      "kind": "box",
+      "params": {
+        "size": [6, 4, 2]
+      },
+      "transform": {
+        "t": [0, 0, 0],
+        "r": [0, 0, 0, 1],
+        "s": [1, 1, 1]
+      },
+      "material": "plain",
+      "op": "union",
+      "children": [
+        {
+          "id": "ring",
+          "kind": "torus",
+          "params": {
+            "majorRadius": 1,
+            "minorRadius": 0.25
+          },
+          "transform": {
+            "t": [0, 0, 0],
+            "r": [0, 0, 0, 1],
+            "s": [1, 1, 1]
+          },
+          "material": "plain",
+          "op": "subtract"
+        }
+      ]
+    }
+  ],
+  "materials": {
+    "plain": {
+      "color": [0.5, 0.5, 0.5],
+      "roughness": 0.5,
+      "metallic": 0,
+      "emissive": [0, 0, 0]
+    }
+  },
+  "anchors": {},
+  "collision": {
+    "mode": "override",
+    "colliders": []
+  }
+}

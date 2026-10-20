@@ -1,0 +1,15 @@
+[
+{"tool": "doc_new", "input": {"name": "start-finish-arch"}},
+{"tool": "node_add_batch", "input": {"items": [
+{"kind": "box", "name": "pillar_l", "transform": {"position": [-3.4, 2, 0]}, "params": {"size": [1.2, 4, 1.5]}, "color": "#8a3ffc"},
+{"kind": "box", "name": "pillar_r", "transform": {"position": [3.4, 2, 0]}, "params": {"size": [1.2, 4, 1.5]}, "color": "#8a3ffc"},
+{"kind": "box", "name": "lintel", "transform": {"position": [0, 4.5, 0]}, "params": {"size": [8, 1, 1.5]}, "color": "#ff2d95"},
+{"kind": "box", "name": "banner", "transform": {"position": [0, 4.5, 0]}, "params": {"size": [5, 0.6, 1.7]}, "color": "#ffd400"},
+{"kind": "sphere", "name": "ball_l", "transform": {"position": [-3.4, 5.1, 0]}, "params": {"radius": 0.45}, "color": "#00d1ff"},
+{"kind": "sphere", "name": "ball_r", "transform": {"position": [3.4, 5.1, 0]}, "params": {"radius": 0.45}, "color": "#00d1ff"},
+{"kind": "box", "name": "line_stripe", "transform": {"position": [0, 0.02, 0]}, "params": {"size": [5.6, 0.04, 0.5]}, "color": "#ffffff"},
+{"kind": "anchor", "name": "line", "transform": {"position": [0, 0, 0]}}
+]}},
+{"tool": "doc_save", "input": {"path": "out/obstacles-v0/start-finish-arch.sdfm.json"}},
+{"tool": "export_raa_prims", "input": {"out": "out/obstacles-v0/start-finish-arch.raa.prims.json", "id": "rf.obstacle.start-finish-arch", "budget": 1500}}
+]

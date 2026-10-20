@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:raa:prims:v0",
+  "title": "raa.prims v0",
+  "description": "Structure of a raa.prims v0 file (S1, S3). Caps, boolean rules, triangle budget, collision equality and numeric cross-field rules are checked by the TypeScript validator, not by this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "id", "name", "nodes", "materials", "anchors", "collision"],
+  "properties": {
+    "format": { "type": "string", "const": "raa.prims" },
+    "version": { "type": "integer", "const": 0 },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{0,63}$" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["triangles", "segments"],
+      "properties": {
+        "triangles": { "type": "integer" },
+        "segments": { "type": "integer" }
+      }
+    },
+    "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "materials": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9_]{0,47}$" },
+      "additionalProperties": { "$ref": "#/$defs/material" }
+    },
+    "anchors": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$" },
+      "additionalProperties": { "$ref": "#/$defs/anchor" }
+    },
+    "collision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "colliders"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["derived", "override"] },
+        "colliders": { "type": "array", "items": { "$ref": "#/$defs/collider" } }
+      }
+    }
+  },
+  "$defs": {
+    "vec3": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+    "quat": { "type": "array", "items": { "type": "number" }, "minItems": 4, "maxItems": 4 },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "r", "s"],
+      "properties": {
+        "t": { "$ref": "#/$defs/vec3" },
+        "r": { "$ref": "#/$defs/quat" },
+        "s": { "$ref": "#/$defs/vec3" }
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["color", "roughness", "metallic", "emissive"],
+      "properties": {
+        "color": { "$ref": "#/$defs/vec3" },
+        "roughness": { "type": "number" },
+        "metallic": { "type": "number" },
+        "emissive": { "$ref": "#/$defs/vec3" }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "r"],
+      "properties": {
+        "t": { "$ref": "#/$defs/vec3" },
+        "r": { "$ref": "#/$defs/quat" }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "params", "transform", "material", "op"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,47}$" },
+        "kind": {
+          "type": "string",
+          "enum": ["sphere", "box", "roundBox", "capsule", "cylinder", "cone", "torus", "ellipsoid"]
+        },
+        "params": { "type": "object" },
+        "transform": { "$ref": "#/$defs/transform" },
+        "material": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,47}$" },
+        "op": { "type": "string", "enum": ["union", "subtract", "intersect"] },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/node" } }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "kind": { "const": "sphere" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["radius"],
+              "properties": { "radius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": { "const": "box" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["size"],
+              "properties": { "size": { "$ref": "#/$defs/vec3" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": { "const": "roundBox" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["size", "radius"],
+              "properties": { "size": { "$ref": "#/$defs/vec3" }, "radius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": { "const": "capsule" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["height", "radius"],
+              "properties": { "height": { "type": "number" }, "radius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": { "const": "cylinder" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["height", "radius"],
+              "properties": { "height": { "type": "number" }, "radius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": { "const": "cone" },
+            "params": {
+              "type": "object", "additionalProperties": false,
+              "required": ["height", "radiusBottom", "radiusTop"],
+              "properties": {
+                "height": { "type": "number" },
+                "radiusBottom": { "type": "number" },
+                "radiusTop": { "type": "number" }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": { "const": "torus" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["majorRadius", "minorRadius"],
+              "properties": { "majorRadius": { "type": "number" }, "minorRadius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": { "const": "ellipsoid" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["radii"],
+              "properties": { "radii": { "$ref": "#/$defs/vec3" } }
+            }
+          }
+        }
+      ]
+    },
+    "collider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node", "shape", "params", "t", "r"],
+      "properties": {
+        "node": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9_]{0,47}$" },
+        "shape": { "type": "string", "enum": ["ball", "cuboid", "roundCuboid", "capsule", "cylinder", "cone"] },
+        "params": { "type": "object" },
+        "t": { "$ref": "#/$defs/vec3" },
+        "r": { "$ref": "#/$defs/quat" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "shape": { "const": "ball" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["radius"],
+              "properties": { "radius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "shape": { "const": "cuboid" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["halfExtents"],
+              "properties": { "halfExtents": { "$ref": "#/$defs/vec3" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "shape": { "const": "roundCuboid" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["halfExtents", "borderRadius"],
+              "properties": { "halfExtents": { "$ref": "#/$defs/vec3" }, "borderRadius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "shape": { "const": "capsule" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["halfHeight", "radius"],
+              "properties": { "halfHeight": { "type": "number" }, "radius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "shape": { "const": "cylinder" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["halfHeight", "radius"],
+              "properties": { "halfHeight": { "type": "number" }, "radius": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "properties": {
+            "shape": { "const": "cone" },
+            "params": {
+              "type": "object", "additionalProperties": false, "required": ["halfHeight", "radius"],
+              "properties": { "halfHeight": { "type": "number" }, "radius": { "type": "number" } }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
